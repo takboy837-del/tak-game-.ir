@@ -1,108 +1,569 @@
+```html
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>کمبو سیتی مجموعه کمپو</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D Shooter</title>
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: radial-gradient(circle at center, #1a2238 0%, #090c14 60%, #05070c 100%);
+      font-family: Arial, sans-serif;
+      user-select: none;
+    }
+
+    canvas {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .ui {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      color: #fff;
+    }
+
+    .topbar {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      display: flex;
+      gap: 14px;
+      font-size: 16px;
+      text-shadow: 0 2px 8px rgba(0,0,0,.6);
+    }
+
+    .panel {
+      background: rgba(0,0,0,.35);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 12px;
+      padding: 10px 14px;
+      backdrop-filter: blur(6px);
+    }
+
+    .centerMsg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      background: rgba(0,0,0,.5);
+      border: 1px solid rgba(255,255,255,.12);
+      padding: 18px 22px;
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(0,0,0,.35);
+      min-width: 280px;
+    }
+
+    .centerMsg h1 {
+      margin: 0 0 10px;
+      font-size: 24px;
+    }
+
+    .centerMsg p {
+      margin: 6px 0;
+      opacity: .92;
+      line-height: 1.6;
+    }
+
+    .hidden { display: none; }
+
+    .crosshair {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 22px;
+      height: 22px;
+      transform: translate(-50%, -50%);
+      filter: drop-shadow(0 0 6px rgba(255,255,255,.5));
+    }
+
+    .crosshair::before,
+    .crosshair::after {
+      content: "";
+      position: absolute;
+      background: rgba(255,255,255,.9);
+      border-radius: 2px;
+    }
+
+    .crosshair::before {
+      left: 50%;
+      top: 0;
+      width: 2px;
+      height: 22px;
+      transform: translateX(-50%);
+    }
+
+    .crosshair::after {
+      top: 50%;
+      left: 0;
+      width: 22px;
+      height: 2px;
+      transform: translateY(-50%);
+    }
+
+    .hint {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 14px;
+      opacity: .85;
+      text-align: center;
+    }
+
+    .bar {
+      width: 180px;
+      height: 12px;
+      background: rgba(255,255,255,.12);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+
+    .bar > div {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #35f28a, #1fbf63);
+      border-radius: 999px;
+    }
+
+    .bar.red > div {
+      background: linear-gradient(90deg, #ff6673, #ff2d4a);
+    }
+
+    .mobileBtns {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      display: none;
+      gap: 10px;
+      pointer-events: auto;
+    }
+
+    .btn {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.08);
+      color: #fff;
+      font-size: 13px;
+      backdrop-filter: blur(6px);
+    }
+
+    @media (max-width: 900px) {
+      .mobileBtns { display: flex; }
+      .hint { font-size: 12px; width: 90%; }
+    }
+  </style>
 </head>
 <body>
-<fieldset style="text-align: center;">
-<legend>صفحه اصلی</legend>
-<p><h1>خوش امدید به پنل کمبو رایگان</h1><h3>پشتیبانی سایت: @kamposity2</h3></p>
-<p>
-    <br>
-<h3>جهت ارتباط با پشتیبانی به ایدی روبیکا بالا پیام بدید</h3>
-</h4></p>
-<fieldset><h3>کمبو سیتی با مدیریت خالدی 
-    <br>
-    <br>
-توجه داشته باشید پس از ورود 5 نفر به اکانت های پایین این اکانت ها غیر فعال میشوند و دیگر  کسی قادر به ورود اکانت ها نیست 
-</h3>
-</fieldset>
-</fieldset>
-<marquee behavior="" direction="ltr">
-<p><h3>تغییرات جدید سایت: اضافه شدن قسمت پشتیبانی _پاسخگویی سریع_اضافه شدن 5 اکانت ناب جدید_بروز رسانی فونت سایت</h3></p>
-</marquee>
-<hr style="height: 6px;">
-<h1>رمز جیمیل های اکانت های تست شده رایگان بدون کمبو
-</h1>
-<fieldset style="background-color: blueviolet;">
-<h1>
-moohamadiar22w3@gmail.com
-<br>
-paswword=ww3iranoli
- </h1>
-</fieldset>
-<fieldset style="background-color: blueviolet;">
-    <h1>
-        nimjja3r3@gmail.com
-        <br>
-paswword=این اکانت ب دلیل هک شدن غیر فعال شده است
-    </h1>
-</fieldset>
-<fieldset style="background-color: blueviolet;">
-<h1>yyyydyrrv@gmail.com
-    <br>
-    paswword=mbapetore3
-</h1>
-</fieldset>
-<fieldset style="background-color: blueviolet;">
-<h1>
-    sinazi4rr@gmail.com
-<br>
-paswword=nimaa1277
-</h1>
-</fieldset>
-<fieldset style="background-color: blueviolet;">
-<h1>
-    rahilgamecall4@gmail.com
-    <br>
-    paswword=raahilgame1387
-</h1>
-</fieldset>
-<h1>اکانت های جدید اپدیت 1.5</h1>
- <fieldset style="background-color: blueviolet;">
+  <canvas id="game"></canvas>
 
-    <h1>
-singh.sahil1513@gmail.com
-        <br>
-paswword=sahil927@
-    </h1>
- </fieldset>
-<fieldset style="background-color: blueviolet;">
-<h1>
-xbadhshroud@gmail.com
-    <br>paswword= Emac2299007
-</h1>
+  <div class="ui">
+    <div class="topbar">
+      <div class="panel">مرحله: <span id="level">1</span></div>
+      <div class="panel">امتیاز: <span id="score">0</span></div>
+      <div class="panel">جان: <span id="hpText">100</span>
+        <div class="bar red"><div id="hpBar"></div></div>
+      </div>
+      <div class="panel">مهمات: <span id="ammoText">∞</span></div>
+    </div>
 
-</fieldset>
-<fieldset style="background-color: blueviolet;">
-<h1>
-hmcc542@gmail.com
-    <br>
-    paswword=Vizio474
-</h1>
-</fieldset>
-<fieldset style="background-color: blueviolet;">
-<h1>
-qkelvinu266@gmail.com
-    <br>paswword=kevin286
-</h1>
-</fieldset>
-<fieldset style="background-color: blueviolet;">
-<h1>
-paul_15denoviembere@gmail.com
-    <br>
-    paswword= henry151101
-</h1></fieldset>
-<fieldset style="background-color: blanchedalmond;">
-<h1>
-<p>نسخه 1.5 اصلی
-<br>
-</p>
-</h1>
-</fieldset>
-<h2>
-</h2>
+    <div class="crosshair"></div>
+
+    <div id="msg" class="centerMsg">
+      <h1>3D Shooter</h1>
+      <p>برای شروع کلیک کن</p>
+      <p>WASD حرکت | موس نگاه | کلیک شلیک | R ری‌لود</p>
+      <p>در موبایل: دکمه‌ها ظاهر می‌شوند</p>
+    </div>
+
+    <div class="hint">
+      دشمن‌ها را بزن، زنده بمان، مرحله را رد کن.
+    </div>
+
+    <div class="mobileBtns">
+      <button class="btn" id="btnShoot">شلیک</button>
+      <button class="btn" id="btnReload">ری‌لود</button>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('game');
+    const ctx = canvas.getContext('2d');
+    const msg = document.getElementById('msg');
+    const levelEl = document.getElementById('level');
+    const scoreEl = document.getElementById('score');
+    const hpText = document.getElementById('hpText');
+    const hpBar = document.getElementById('hpBar');
+
+    let W = innerWidth, H = innerHeight;
+    canvas.width = W; canvas.height = H;
+
+    addEventListener('resize', () => {
+      W = innerWidth; H = innerHeight;
+      canvas.width = W; canvas.height = H;
+    });
+
+    const keys = {};
+    let playing = false;
+    let score = 0;
+    let level = 1;
+    let hp = 100;
+    let ammo = 12;
+    let reloadTime = 0;
+    let lastShot = 0;
+    let spawnTimer = 0;
+
+    const player = {
+      x: 0, y: 0, z: 0,
+      angle: 0,
+      vx: 0, vz: 0
+    };
+
+    const bullets = [];
+    const enemies = [];
+    const particles = [];
+    const obstacles = [];
+
+    function rand(min, max) { return Math.random() * (max - min) + min; }
+    function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+
+    function makeLevel(n) {
+      enemies.length = 0;
+      obstacles.length = 0;
+
+      const obsCount = 5 + n * 2;
+      for (let i = 0; i < obsCount; i++) {
+        obstacles.push({
+          x: rand(-18, 18),
+          z: rand(12, 80),
+          w: rand(2.5, 6),
+          h: rand(2.5, 7),
+          d: rand(2.5, 6)
+        });
+      }
+
+      const eCount = 4 + n * 3;
+      for (let i = 0; i < eCount; i++) spawnEnemy(true);
+    }
+
+    function spawnEnemy(initial=false) {
+      enemies.push({
+        x: rand(-20, 20),
+        y: 0,
+        z: initial ? rand(18, 95) : rand(45, 100),
+        hp: 2 + Math.floor(level / 2),
+        speed: rand(0.01, 0.025) + level * 0.002,
+        bob: rand(0, Math.PI * 2)
+      });
+    }
+
+    function resetGame() {
+      score = 0; level = 1; hp = 100; ammo = 12; reloadTime = 0; lastShot = 0;
+      player.x = 0; player.z = 0; player.angle = 0;
+      bullets.length = 0; particles.length = 0;
+      makeLevel(level);
+      updateUI();
+      msg.classList.remove('hidden');
+      msg.innerHTML = `
+        <h1>3D Shooter</h1>
+        <p>کلیک کن و شروع کن</p>
+        <p>WASD حرکت | موس نگاه | کلیک شلیک | R ری‌لود</p>
+      `;
+      playing = false;
+    }
+
+    function updateUI() {
+      levelEl.textContent = level;
+      scoreEl.textContent = score;
+      hpText.textContent = Math.max(0, Math.floor(hp));
+      hpBar.style.width = clamp(hp, 0, 100) + '%';
+    }
+
+    function shoot() {
+      const now = performance.now();
+      if (!playing || now - lastShot < 170 || reloadTime > 0) return;
+      if (ammo <= 0) return;
+      ammo--;
+      lastShot = now;
+      for (let i = 0; i < 6; i++) {
+        particles.push({
+          x: player.x,
+          y: 0.5,
+          z: player.z,
+          vx: Math.sin(player.angle) * rand(0.1, 0.2) + rand(-0.02, 0.02),
+          vy: rand(0.01, 0.04),
+          vz: Math.cos(player.angle) * rand(0.1, 0.2) + rand(-0.02, 0.02),
+          life: 22
+        });
+      }
+
+      bullets.push({
+        x: player.x,
+        y: 0.8,
+        z: player.z,
+        vx: Math.sin(player.angle) * 1.2,
+        vz: Math.cos(player.angle) * 1.2,
+        life: 80
+      });
+      updateUI();
+    }
+
+    function reload() {
+      if (!playing || reloadTime > 0 || ammo === 12) return;
+      reloadTime = 50;
+      setTimeout(() => { ammo = 12; reloadTime = 0; updateUI(); }, 800);
+    }
+
+    function hitEffect(x, z, color='#ffcc55') {
+      for (let i = 0; i < 18; i++) particles.push({
+        x, y: 0.4, z,
+        vx: rand(-0.12, 0.12),
+        vy: rand(0.01, 0.09),
+        vz: rand(-0.12, 0.12),
+        life: rand(18, 35),
+        color
+      });
+    }
+
+    function project(x, y, z) {
+      const dx = x - player.x;
+      const dz = z - player.z;
+      const sin = Math.sin(-player.angle);
+      const cos = Math.cos(-player.angle);
+      const rx = dx * cos - dz * sin;
+      const rz = dx * sin + dz * cos;
+      if (rz <= 0.1) return null;
+      const f = 900 / rz;
+      return {
+        x: W / 2 + rx * f,
+        y: H / 2 - y * f,
+        s: f
+      };
+    }
+
+    function drawSky() {
+      const g = ctx.createLinearGradient(0, 0, 0, H);
+      g.addColorStop(0, '#10203f');
+      g.addColorStop(0.5, '#0b1020');
+      g.addColorStop(1, '#04060b');
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, W, H);
+
+      for (let i = 0; i < 30; i++) {
+        const x = (i * 173 + (performance.now() * 0.01)) % W;
+        ctx.fillStyle = 'rgba(255,255,255,.25)';
+        ctx.fillRect(x, 50 + (i % 6) * 18, 2, 2);
+      }
+    }
+
+    function drawGround() {
+      ctx.save();
+      ctx.translate(W / 2, H * 0.78);
+      ctx.fillStyle = '#071114';
+      ctx.fillRect(-W, 0, W * 2, H);
+      ctx.restore();
+
+      for (let i = 0; i < 28; i++) {
+        const z = i * 6 + ((performance.now() * 0.02) % 6);
+        const p1 = project(-35, 0, z + 1);
+        const p2 = project(35, 0, z + 1);
+        if (!p1 || !p2) continue;
+        ctx.strokeStyle = 'rgba(120,200,255,.06)';
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+      }
+    }
+
+    function drawBox(obj, color1, color2) {
+      const p = project(obj.x, obj.y, obj.z);
+      if (!p) return;
+      const size = p.s * obj.w;
+      const h = p.s * obj.h;
+      if (size < 2 || h < 2) return;
+      const x = p.x, y = p.y;
+      const grad = ctx.createLinearGradient(x - size/2, y - h, x + size/2, y + h);
+      grad.addColorStop(0, color1);
+      grad.addColorStop(1, color2);
+      ctx.fillStyle = grad;
+      ctx.fillRect(x - size/2, y - h, size, h);
+      ctx.strokeStyle = 'rgba(255,255,255,.12)';
+      ctx.strokeRect(x - size/2, y - h, size, h);
+    }
+
+    function update(dt) {
+      if (!playing) return;
+
+      const speed = 0.06 + level * 0.003;
+      if (keys['w'] || keys['ArrowUp']) { player.x += Math.sin(player.angle) * speed; player.z += Math.cos(player.angle) * speed; }
+      if (keys['s'] || keys['ArrowDown']) { player.x -= Math.sin(player.angle) * speed; player.z -= Math.cos(player.angle) * speed; }
+      if (keys['a'] || keys['ArrowLeft']) { player.angle -= 0.045; }
+      if (keys['d'] || keys['ArrowRight']) { player.angle += 0.045; }
+
+      player.x = clamp(player.x, -24, 24);
+      player.z = clamp(player.z, -8, 18);
+
+      bullets.forEach(b => {
+        b.x += b.vx;
+        b.z += b.vz;
+        b.life--;
+      });
+
+      enemies.forEach(e => {
+        const dx = player.x - e.x;
+        const dz = player.z - e.z;
+        const dist = Math.hypot(dx, dz);
+        e.x += dx / dist * e.speed;
+        e.z += dz / dist * e.speed;
+        e.bob += 0.08;
+        if (dist < 1.4) {
+          hp -= 0.25 * (1 + level * 0.15);
+          if (hp <= 0) endGame();
+        }
+      });
+
+      bullets.forEach(b => {
+        enemies.forEach(e => {
+          const d = Math.hypot(b.x - e.x, b.z - e.z);
+          if (d < 1.2) {
+            e.hp--;
+            b.life = 0;
+            hitEffect(e.x, e.z);
+            if (e.hp <= 0) {
+              score += 10;
+              enemies.splice(enemies.indexOf(e), 1);
+              hitEffect(e.x, e.z, '#ff5577');
+            }
+          }
+        });
+      });
+
+      particles.forEach(p => {
+        p.x += p.vx; p.y += p.vy; p.z += p.vz;
+        p.vy -= 0.003;
+        p.life--;
+      });
+
+      bullets.filter(b => b.life > 0);
+      for (let i = bullets.length - 1; i >= 0; i--) if (bullets[i].life <= 0) bullets.splice(i, 1);
+      for (let i = particles.length - 1; i >= 0; i--) if (particles[i].life <= 0) particles.splice(i, 1);
+
+      spawnTimer++;
+      if (spawnTimer > 240 - level * 12) {
+        spawnTimer = 0;
+        if (enemies.length < 8 + level * 2) spawnEnemy();
+      }
+
+      if (enemies.length === 0) {
+        level++;
+        score += 50;
+        hp = Math.min(100, hp + 20);
+        ammo = 12;
+        makeLevel(level);
+      }
+
+      updateUI();
+    }
+
+    function render() {
+      drawSky();
+      drawGround();
+
+      obstacles.slice().sort((a,b)=>b.z-a.z).forEach(o => {
+        const p = project(o.x, 0, o.z);
+        if (!p) return;
+        const w = p.s * o.w;
+        const h = p.s * o.h;
+        if (w < 2 || h < 2) return;
+        ctx.fillStyle = 'rgba(80,120,160,.35)';
+        ctx.fillRect(p.x - w/2, p.y - h, w, h);
+        ctx.strokeStyle = 'rgba(180,220,255,.14)';
+        ctx.strokeRect(p.x - w/2, p.y - h, w, h);
+      });
+
+      enemies.slice().sort((a,b)=>b.z-a.z).forEach(e => {
+        const p = project(e.x, e.bob * 0.15, e.z);
+        if (!p) return;
+        const size = p.s * 0.9;
+        ctx.fillStyle = '#ff3c6e';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y - size * 0.55, size * 0.35, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#7a1732';
+        ctx.fillRect(p.x - size * 0.22, p.y - size * 0.15, size * 0.44, size * 0.45);
+        ctx.strokeStyle = 'rgba(255,255,255,.15)';
+        ctx.strokeRect(p.x - size * 0.22, p.y - size * 0.15, size * 0.44, size * 0.45);
+      });
+
+      bullets.forEach(b => {
+        const p = project(b.x, 0.8, b.z);
+        if (!p) return;
+        ctx.fillStyle = '#ffe17a';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, Math.max(2, p.s * 0.08), 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      particles.forEach(p => {
+        const pr = project(p.x, p.y, p.z);
+        if (!pr) return;
+        ctx.fillStyle = p.color || 'rgba(255,210,90,.85)';
+        ctx.fillRect(pr.x, pr.y, 2, 2);
+      });
+
+      ctx.fillStyle = 'rgba(255,255,255,.06)';
+      ctx.fillRect(0, H*0.78, W, H*0.22);
+    }
+
+    function loop(t) {
+      update(16);
+      render();
+      requestAnimationFrame(loop);
+    }
+
+    function endGame() {
+      playing = false;
+      msg.classList.remove('hidden');
+      msg.innerHTML = `<h1>Game Over</h1><p>امتیاز: ${score}</p><p>برای شروع دوباره کلیک کن</p>`;
+    }
+
+    addEventListener('keydown', e => {
+      keys[e.key.toLowerCase()] = true;
+      if (e.key.toLowerCase() === 'r') reload();
+    });
+    addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
+
+    addEventListener('click', () => {
+      if (!playing) {
+        playing = true;
+        msg.classList.add('hidden');
+        return;
+      }
+      shoot();
+    });
+
+    addEventListener('mousemove', e => {
+      if (!playing) return;
+      player.angle += (e.movementX || 0) * 0.002;
+    });
+
+    document.getElementById('btnShoot').addEventListener('click', shoot);
+    document.getElementById('btnReload').addEventListener('click', reload);
+
+    resetGame();
+    requestAnimationFrame(loop);
+  </script>
 </body>
 </html>
+```
