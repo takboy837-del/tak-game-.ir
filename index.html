@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>شبکه اجتماعی شیک</title>
+  <title>داستان‌نویس - شبکه داستان‌ها</title>
   <style>
     * {
       box-sizing: border-box;
@@ -13,233 +14,163 @@
     }
 
     body {
-      background: linear-gradient(135deg, #111827, #1f2937);
+      background: linear-gradient(135deg, #0f172a, #111827);
       color: #fff;
       min-height: 100vh;
     }
 
-    .app {
-      display: flex;
-      min-height: 100vh;
-    }
-
-    .sidebar {
-      width: 260px;
-      background: rgba(17, 24, 39, 0.95);
-      border-left: 1px solid rgba(255, 255, 255, 0.08);
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
       padding: 20px;
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      right: 0;
-      overflow-y: auto;
-      backdrop-filter: blur(12px);
     }
 
-    .logo {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 25px;
-      color: #f472b6;
+    .header {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      backdrop-filter: blur(10px);
     }
 
-    .menu button {
+    .header h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+      color: #f9fafb;
+    }
+
+    .header p {
+      color: #cbd5e1;
+      line-height: 1.8;
+      font-size: 14px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 18px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    input, textarea, button {
       width: 100%;
-      background: transparent;
-      color: #fff;
-      border: none;
-      padding: 14px 16px;
-      text-align: right;
+      padding: 12px 14px;
       border-radius: 14px;
-      margin-bottom: 10px;
-      cursor: pointer;
-      transition: 0.3s;
+      border: none;
+      outline: none;
+      margin-top: 12px;
       font-size: 15px;
     }
 
-    .menu button:hover,
-    .menu button.active {
-      background: linear-gradient(90deg, #ec4899, #8b5cf6);
-      transform: translateX(-4px);
+    input, textarea {
+      background: rgba(255,255,255,0.08);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.08);
     }
 
-    .content {
-      margin-right: 260px;
-      width: calc(100% - 260px);
-      padding: 24px;
+    textarea {
+      min-height: 130px;
+      resize: vertical;
+      line-height: 1.8;
+    }
+
+    button {
+      background: linear-gradient(90deg, #ec4899, #8b5cf6);
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.25s;
+    }
+
+    button:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
     }
 
     .topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(255,255,255,0.06);
-      padding: 16px 20px;
-      border-radius: 18px;
-      margin-bottom: 22px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
-
-    .topbar .stats {
-      display: flex;
-      gap: 15px;
+      gap: 12px;
       flex-wrap: wrap;
     }
 
     .badge {
-      background: rgba(255,255,255,0.12);
-      padding: 10px 14px;
-      border-radius: 12px;
+      background: rgba(255,255,255,0.1);
+      padding: 8px 12px;
+      border-radius: 999px;
       font-size: 14px;
     }
 
-    .page {
-      display: none;
-      animation: fadeIn 0.35s ease;
-    }
-
-    .page.active {
-      display: block;
-    }
-
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(10px);}
-      to {opacity: 1; transform: translateY(0);}
-    }
-
-    .card {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 20px;
-      padding: 18px;
-      margin-bottom: 18px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    }
-
-    .card h2, .card h3 {
-      margin-bottom: 12px;
-      color: #f9fafb;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 16px;
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
     }
 
     .post {
       background: rgba(255,255,255,0.06);
-      border-radius: 18px;
-      overflow: hidden;
       border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 16px;
     }
 
-    .post img, .post video {
-      width: 100%;
-      display: block;
-      max-height: 360px;
-      object-fit: cover;
-      background: #000;
-    }
-
-    .post-body {
-      padding: 14px;
-    }
-
-    .post-body p {
-      color: #e5e7eb;
-      margin-bottom: 10px;
-      line-height: 1.8;
-    }
-
-    .post-actions {
+    .post-head {
       display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .author {
+      font-weight: bold;
+      color: #f9fafb;
+    }
+
+    .time {
+      color: #cbd5e1;
+      font-size: 13px;
+    }
+
+    .story {
+      line-height: 2;
+      color: #e5e7eb;
+      white-space: pre-wrap;
+      margin: 12px 0 14px;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
       gap: 10px;
       flex-wrap: wrap;
     }
 
-    button.primary, .small-btn {
+    .like-btn {
+      width: auto;
+      padding: 10px 14px;
+      border-radius: 12px;
       border: none;
       cursor: pointer;
-      border-radius: 12px;
-      padding: 10px 14px;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      font-weight: bold;
+    }
+
+    .like-btn.liked {
+      background: linear-gradient(90deg, #ef4444, #f97316);
+    }
+
+    .count {
+      color: #f9fafb;
       font-size: 14px;
-      transition: 0.25s;
-    }
-
-    button.primary {
-      background: linear-gradient(90deg, #ec4899, #8b5cf6);
-      color: white;
-    }
-
-    button.primary:hover {
-      opacity: 0.92;
-      transform: translateY(-1px);
-    }
-
-    .small-btn {
-      background: rgba(255,255,255,0.12);
-      color: #fff;
-    }
-
-    .small-btn:hover {
-      background: rgba(255,255,255,0.18);
-    }
-
-    input, textarea {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.12);
-      outline: none;
-      background: rgba(255,255,255,0.06);
-      color: white;
-      margin-bottom: 12px;
-    }
-
-    textarea {
-      min-height: 110px;
-      resize: vertical;
-    }
-
-    .profile-box {
-      display: flex;
-      gap: 18px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .avatar {
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #ec4899, #8b5cf6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 34px;
-      font-weight: bold;
-      color: white;
-    }
-
-    .followers-list {
-      display: grid;
-      gap: 12px;
-    }
-
-    .user-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(255,255,255,0.06);
-      padding: 14px;
-      border-radius: 14px;
-    }
-
-    .money-box {
-      font-size: 22px;
-      font-weight: bold;
-      color: #f9c74f;
     }
 
     .muted {
@@ -247,325 +178,205 @@
       font-size: 14px;
     }
 
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      background: rgba(15, 23, 42, 0.95);
-      color: white;
-      padding: 12px 16px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.08);
-      display: none;
-      z-index: 9999;
+    .hidden { display: none; }
+
+    .login {
+      max-width: 520px;
+      margin: 70px auto;
     }
 
-    @media (max-width: 900px) {
-      .sidebar {
-        width: 100%;
-        position: relative;
-        height: auto;
-      }
-      .content {
-        margin-right: 0;
-        width: 100%;
-      }
-      .app {
-        flex-direction: column;
-      }
+    .empty {
+      text-align: center;
+      color: #cbd5e1;
+      padding: 30px 10px;
+    }
+
+    .footer-note {
+      margin-top: 16px;
+      font-size: 13px;
+      color: #cbd5e1;
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      .container { padding: 14px; }
+      .header h1 { font-size: 22px; }
     }
   </style>
 </head>
 <body>
-  <div class="app">
-    <aside class="sidebar">
-      <div class="logo">InstaLite</div>
-      <div class="menu">
-        <button class="nav-btn active" onclick="showPage('home', this)">خانه</button>
-        <button class="nav-btn" onclick="showPage('profile', this)">پروفایل</button>
-        <button class="nav-btn" onclick="showPage('upload', this)">آپلود پست/ویدیو</button>
-        <button class="nav-btn" onclick="showPage('followers', this)">فالوورها</button>
-        <button class="nav-btn" onclick="showPage('earnings', this)">درآمد</button>
-      </div>
-    </aside>
+  <div class="container">
 
-    <main class="content">
-      <div class="topbar">
-        <div>
-          <h2>سلام، <span id="usernameTop">کاربر</span> 👋</h2>
-          <div class="muted">یک نسخه‌ی شیک و چندصفحه‌ای شبیه شبکه اجتماعی</div>
-        </div>
-        <div class="stats">
-          <div class="badge">پست‌ها: <span id="postCount">0</span></div>
-          <div class="badge">دنبال‌کننده‌ها: <span id="followerCount">0</span></div>
-          <div class="badge">درآمد: <span id="earningCount">0</span> ریال</div>
-        </div>
+    <div id="loginBox" class="login">
+      <div class="header">
+        <h1>داستان‌نویس</h1>
+        <p>
+          جایی برای نوشتن داستان‌ها، تجربه‌ها و ماجراهای زندگی.
+          فقط لایک وجود دارد تا حس و حال پست‌ها را نشان بدهی.
+        </p>
       </div>
 
-      <section id="home" class="page active">
-        <div class="card">
-          <h2>پست‌های اخیر</h2>
-          <p class="muted">ویدیوها با هر بازدید، ۲۰ ریال به درآمد اضافه می‌کنند.</p>
-        </div>
-        <div id="postsContainer" class="grid"></div>
-      </section>
+      <div class="card">
+        <h2>ورود</h2>
+        <input id="usernameInput" type="text" placeholder="نام شما" />
+        <button onclick="login()">ورود به شبکه</button>
+      </div>
+    </div>
 
-      <section id="profile" class="page">
-        <div class="card">
-          <h2>پروفایل</h2>
-          <div class="profile-box">
-            <div class="avatar" id="avatarBox">A</div>
-            <div>
-              <h3 id="profileName">کاربر نمونه</h3>
-              <p class="muted">نام کاربری: <span id="profileHandle">@sample</span></p>
-              <p class="muted">بازدیدها: <span id="viewsCount">0</span></p>
-            </div>
+    <div id="appBox" class="hidden">
+      <div class="header">
+        <div class="topbar">
+          <div>
+            <h1>داستان‌نویس</h1>
+            <p>سلام <strong id="currentUserName"></strong>، داستانت را بنویس و با دیگران به اشتراک بگذار.</p>
           </div>
+          <div class="badge">تعداد داستان‌ها: <span id="postCount">0</span></div>
         </div>
+      </div>
 
-        <div class="card">
-          <h3>ویرایش نام</h3>
-          <input type="text" id="nameInput" placeholder="نام جدید" />
-          <button class="primary" onclick="saveProfile()">ذخیره پروفایل</button>
-        </div>
-      </section>
+      <div class="card">
+        <h2>نوشتن داستان جدید</h2>
+        <textarea id="storyInput" placeholder="داستان، تجربه یا ماجرای زندگی‌ات را بنویس..."></textarea>
+        <button onclick="addPost()">انتشار داستان</button>
+      </div>
 
-      <section id="upload" class="page">
-        <div class="card">
-          <h2>آپلود پست یا ویدیو</h2>
-          <input type="text" id="postTitle" placeholder="عنوان پست" />
-          <textarea id="postCaption" placeholder="توضیحات پست"></textarea>
-          <input type="file" id="postFile" accept="image/*,video/*" />
-          <button class="primary" onclick="addPost()">انتشار</button>
+      <div class="card">
+        <div class="topbar">
+          <h2>تایم‌لاین</h2>
+          <div class="muted">فقط لایک برای هر پست فعال است</div>
         </div>
-      </section>
+      </div>
 
-      <section id="followers" class="page">
-        <div class="card">
-          <h2>فالوورها و کاربران</h2>
-          <p class="muted">می‌توانی کاربران دیگر را فالو یا آنفالو کنی.</p>
-        </div>
-        <div id="usersContainer" class="followers-list"></div>
-      </section>
+      <div id="timeline" class="timeline"></div>
 
-      <section id="earnings" class="page">
-        <div class="card">
-          <h2>پنل درآمد</h2>
-          <p class="muted">هر ۱ بازدید ویدیو = ۲۰ ریال</p>
-          <div style="margin-top: 12px;" class="money-box">
-            <span id="earningPanel">0</span> ریال
-          </div>
-        </div>
-
-        <div class="card">
-          <h3>آمار</h3>
-          <p>کل بازدید ویدیوها: <strong id="totalViews">0</strong></p>
-          <p>کل درآمد: <strong id="totalEarning2">0</strong> ریال</p>
-          <button class="primary" onclick="resetData()" style="margin-top: 12px; background: linear-gradient(90deg, #ef4444, #f97316);">
-            ریست اطلاعات
-          </button>
-        </div>
-      </section>
-    </main>
+      <div class="footer-note">
+        این نسخه تک‌فایلی و نمایشی است و پست‌ها در همین مرورگر ذخیره می‌شوند.
+      </div>
+    </div>
   </div>
 
-  <div id="toast" class="toast"></div>
-
   <script>
-    let data = JSON.parse(localStorage.getItem("instaliteData")) || {
-      username: "کاربر نمونه",
-      handle: "@sample",
-      posts: [
-        {
-          id: 1,
-          title: "اولین پست",
-          caption: "این یک نمونه پست است.",
-          type: "image",
-          src: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900",
-          views: 0,
-          likes: 0
-        },
-        {
-          id: 2,
-          title: "ویدیوی نمونه",
-          caption: "هر بازدید از این ویدیو درآمد ایجاد می‌کند.",
-          type: "video",
-          src: "https://www.w3schools.com/html/mov_bbb.mp4",
-          views: 0,
-          likes: 0
-        }
-      ],
-      users: [
-        { id: 1, name: "علی", followed: false },
-        { id: 2, name: "مریم", followed: false },
-        { id: 3, name: "رضا", followed: false },
-        { id: 4, name: "سارا", followed: false }
-      ],
-      earnings: 0,
-      totalViews: 0
-    };
+    let currentUser = localStorage.getItem("storyUser") || "";
+    let posts = JSON.parse(localStorage.getItem("storyPosts")) || [
+      {
+        id: 1,
+        author: "مینا",
+        text: "امروز بعد از مدت‌ها یک قدم بزرگ برای آینده‌ام برداشتم. شاید کوچک به نظر برسد، اما برای من خیلی مهم بود.",
+        time: "2 ساعت پیش",
+        likes: 3,
+        liked: false
+      },
+      {
+        id: 2,
+        author: "علی",
+        text: "گاهی یک اتفاق ساده می‌تواند نگاه آدم را به زندگی عوض کند. امروز برای من چنین روزی بود.",
+        time: "5 ساعت پیش",
+        likes: 7,
+        liked: false
+      }
+    ];
 
-    function saveData() {
-      localStorage.setItem("instaliteData", JSON.stringify(data));
-      updateUI();
-    }
+    function login() {
+      const name = document.getElementById("usernameInput").value.trim();
+      if (!name) return alert("لطفاً نام خود را وارد کن");
 
-    function showToast(msg) {
-      const toast = document.getElementById("toast");
-      toast.innerText = msg;
-      toast.style.display = "block";
-      setTimeout(() => toast.style.display = "none", 1800);
-    }
+      currentUser = name;
+      localStorage.setItem("storyUser", name);
 
-    function showPage(pageId, btn) {
-      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
-      document.getElementById(pageId).classList.add("active");
-      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-    }
-
-    function updateUI() {
-      document.getElementById("usernameTop").innerText = data.username;
-      document.getElementById("profileName").innerText = data.username;
-      document.getElementById("profileHandle").innerText = data.handle;
-      document.getElementById("nameInput").value = data.username;
-      document.getElementById("postCount").innerText = data.posts.length;
-      document.getElementById("followerCount").innerText = data.users.filter(u => u.followed).length;
-      document.getElementById("earningCount").innerText = data.earnings;
-      document.getElementById("earningPanel").innerText = data.earnings;
-      document.getElementById("totalViews").innerText = data.totalViews;
-      document.getElementById("totalEarning2").innerText = data.earnings;
-      document.getElementById("viewsCount").innerText = data.totalViews;
-      document.getElementById("avatarBox").innerText = data.username.charAt(0);
+      document.getElementById("loginBox").classList.add("hidden");
+      document.getElementById("appBox").classList.remove("hidden");
+      document.getElementById("currentUserName").innerText = currentUser;
 
       renderPosts();
-      renderUsers();
-    }
-
-    function renderPosts() {
-      const container = document.getElementById("postsContainer");
-      container.innerHTML = "";
-
-      data.posts.slice().reverse().forEach(post => {
-        const postEl = document.createElement("div");
-        postEl.className = "post";
-
-        const media = post.type === "image"
-          ? `<img src="${post.src}" alt="${post.title}">`
-          : `<video controls src="${post.src}" onplay="countView(${post.id})"></video>`;
-
-        postEl.innerHTML = `
-          ${media}
-          <div class="post-body">
-            <h3>${post.title}</h3>
-            <p>${post.caption}</p>
-            <div class="muted">بازدید: ${post.views} | لایک: ${post.likes}</div>
-            <div class="post-actions" style="margin-top:10px;">
-              <button class="small-btn" onclick="likePost(${post.id})">لایک</button>
-              <button class="small-btn" onclick="sharePost(${post.id})">اشتراک</button>
-            </div>
-          </div>
-        `;
-        container.appendChild(postEl);
-      });
-    }
-
-    function renderUsers() {
-      const container = document.getElementById("usersContainer");
-      container.innerHTML = "";
-
-      data.users.forEach(user => {
-        const el = document.createElement("div");
-        el.className = "user-item";
-        el.innerHTML = `
-          <div>
-            <strong>${user.name}</strong>
-            <div class="muted">${user.followed ? "شما این کاربر را دنبال می‌کنید" : "دنبال نشده"}</div>
-          </div>
-          <button class="primary" onclick="toggleFollow(${user.id})">
-            ${user.followed ? "آنفالو" : "فالو"}
-          </button>
-        `;
-        container.appendChild(el);
-      });
-    }
-
-    function saveProfile() {
-      const name = document.getElementById("nameInput").value.trim();
-      if (!name) return showToast("نام را وارد کن");
-      data.username = name;
-      data.handle = "@" + name.replace(/\s+/g, "").toLowerCase();
-      saveData();
-      showToast("پروفایل ذخیره شد");
     }
 
     function addPost() {
-      const title = document.getElementById("postTitle").value.trim();
-      const caption = document.getElementById("postCaption").value.trim();
-      const file = document.getElementById("postFile").files[0];
+      const text = document.getElementById("storyInput").value.trim();
+      if (!text) return alert("متن داستان را وارد کن");
 
-      if (!title || !caption || !file) return showToast("همه فیلدها را پر کن");
-
-      const type = file.type.startsWith("video") ? "video" : "image";
-      const src = URL.createObjectURL(file);
-
-      data.posts.push({
+      posts.unshift({
         id: Date.now(),
-        title,
-        caption,
-        type,
-        src,
-        views: 0,
-        likes: 0
+        author: currentUser,
+        text,
+        time: "الان",
+        likes: 0,
+        liked: false
       });
 
-      document.getElementById("postTitle").value = "";
-      document.getElementById("postCaption").value = "";
-      document.getElementById("postFile").value = "";
-
-      saveData();
-      showToast("پست منتشر شد");
-      showPage("home", document.querySelectorAll(".nav-btn")[0]);
-    }
-
-    function toggleFollow(id) {
-      const user = data.users.find(u => u.id === id);
-      user.followed = !user.followed;
-      saveData();
-      showToast(user.followed ? "کاربر فالو شد" : "آنفالو شد");
+      document.getElementById("storyInput").value = "";
+      savePosts();
+      renderPosts();
     }
 
     function likePost(id) {
-      const post = data.posts.find(p => p.id === id);
-      post.likes++;
-      saveData();
-      showToast("لایک شد");
-    }
-
-    function sharePost() {
-      showToast("اشتراک‌گذاری در نسخه نمایشی فعال است");
-    }
-
-    function countView(id) {
-      const post = data.posts.find(p => p.id === id);
+      const post = posts.find(p => p.id === id);
       if (!post) return;
 
-      post.views++;
-      data.totalViews++;
-      data.earnings += 20;
+      if (post.liked) {
+        post.liked = false;
+        post.likes--;
+      } else {
+        post.liked = true;
+        post.likes++;
+      }
 
-      saveData();
-      showToast("۲۰ ریال به درآمد اضافه شد");
+      savePosts();
+      renderPosts();
     }
 
-    function resetData() {
-      if (!confirm("همه اطلاعات حذف شود؟")) return;
-      localStorage.removeItem("instaliteData");
-      location.reload();
+    function savePosts() {
+      localStorage.setItem("storyPosts", JSON.stringify(posts));
+      document.getElementById("postCount").innerText = posts.length;
     }
 
-    updateUI();
+    function renderPosts() {
+      const timeline = document.getElementById("timeline");
+      timeline.innerHTML = "";
+      document.getElementById("postCount").innerText = posts.length;
+
+      if (posts.length === 0) {
+        timeline.innerHTML = `<div class="card empty">هنوز داستانی ثبت نشده است.</div>`;
+        return;
+      }
+
+      posts.forEach(post => {
+        const el = document.createElement("div");
+        el.className = "post";
+        el.innerHTML = `
+          <div class="post-head">
+            <div class="author">${post.author}</div>
+            <div class="time">${post.time}</div>
+          </div>
+          <div class="story">${escapeHtml(post.text)}</div>
+          <div class="actions">
+            <button class="like-btn ${post.liked ? 'liked' : ''}" onclick="likePost(${post.id})">
+              ${post.liked ? '♥ لایک شده' : '♡ لایک'}
+            </button>
+            <div class="count">تعداد لایک: ${post.likes}</div>
+          </div>
+        `;
+        timeline.appendChild(el);
+      });
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    // auto login if user exists
+    if (currentUser) {
+      document.getElementById("loginBox").classList.add("hidden");
+      document.getElementById("appBox").classList.remove("hidden");
+      document.getElementById("currentUserName").innerText = currentUser;
+      renderPosts();
+    } else {
+      renderPosts();
+    }
   </script>
 </body>
-                </html>
-  
+</html>
