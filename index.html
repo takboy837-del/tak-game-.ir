@@ -1,569 +1,391 @@
-```html
 <!DOCTYPE html>
 <html lang="fa">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>3D Shooter</title>
+  <title>بازی داستانی - شبِ آخر</title>
   <style>
     html, body {
       margin: 0;
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background: radial-gradient(circle at center, #1a2238 0%, #090c14 60%, #05070c 100%);
       font-family: Arial, sans-serif;
+      background:
+        radial-gradient(circle at top, #1b2340 0%, #0b1020 45%, #05070d 100%);
+      color: #fff;
       user-select: none;
     }
 
-    canvas {
-      display: block;
-      width: 100vw;
-      height: 100vh;
-    }
-
-    .ui {
-      position: absolute;
+    body::before {
+      content: "";
+      position: fixed;
       inset: 0;
+      background:
+        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+      background-size: 34px 34px;
+      opacity: .12;
       pointer-events: none;
-      color: #fff;
     }
 
-    .topbar {
-      position: absolute;
-      top: 12px;
-      left: 12px;
+    .wrap {
+      width: 100%;
+      height: 100%;
       display: flex;
-      gap: 14px;
-      font-size: 16px;
-      text-shadow: 0 2px 8px rgba(0,0,0,.6);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
     }
 
-    .panel {
-      background: rgba(0,0,0,.35);
+    .card {
+      width: min(900px, 96vw);
+      min-height: min(620px, 92vh);
+      border-radius: 24px;
+      background: rgba(10, 14, 28, .72);
       border: 1px solid rgba(255,255,255,.12);
-      border-radius: 12px;
-      padding: 10px 14px;
-      backdrop-filter: blur(6px);
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+      backdrop-filter: blur(12px);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
-    .centerMsg {
+    .hero {
+      height: 230px;
+      position: relative;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(120,180,255,.35), transparent 35%),
+        radial-gradient(circle at 80% 30%, rgba(255,120,160,.2), transparent 28%),
+        linear-gradient(180deg, #101a38 0%, #0c1227 55%, #080c18 100%);
+    }
+
+    .moon {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      background: rgba(0,0,0,.5);
-      border: 1px solid rgba(255,255,255,.12);
-      padding: 18px 22px;
-      border-radius: 16px;
-      box-shadow: 0 12px 40px rgba(0,0,0,.35);
-      min-width: 280px;
+      top: 36px;
+      right: 52px;
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      background: #e7efff;
+      box-shadow: 0 0 35px rgba(190,220,255,.35);
     }
 
-    .centerMsg h1 {
-      margin: 0 0 10px;
-      font-size: 24px;
-    }
-
-    .centerMsg p {
-      margin: 6px 0;
-      opacity: .92;
-      line-height: 1.6;
-    }
-
-    .hidden { display: none; }
-
-    .crosshair {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      width: 22px;
-      height: 22px;
-      transform: translate(-50%, -50%);
-      filter: drop-shadow(0 0 6px rgba(255,255,255,.5));
-    }
-
-    .crosshair::before,
-    .crosshair::after {
+    .moon::before {
       content: "";
       position: absolute;
-      background: rgba(255,255,255,.9);
-      border-radius: 2px;
+      inset: 10px 18px 18px 10px;
+      border-radius: 50%;
+      background: rgba(205,220,255,.35);
     }
 
-    .crosshair::before {
-      left: 50%;
-      top: 0;
-      width: 2px;
-      height: 22px;
-      transform: translateX(-50%);
-    }
-
-    .crosshair::after {
-      top: 50%;
+    .city {
+      position: absolute;
       left: 0;
-      width: 22px;
-      height: 2px;
-      transform: translateY(-50%);
+      right: 0;
+      bottom: 0;
+      height: 90px;
+      background:
+        linear-gradient(to top, rgba(0,0,0,.75), transparent),
+        linear-gradient(90deg, #04060d 0 12%, #0a1120 12% 18%, #03050a 18% 26%, #0d1428 26% 34%, #05070c 34% 42%, #0a1020 42% 52%, #03050a 52% 61%, #10182f 61% 70%, #05070d 70% 79%, #0b1226 79% 88%, #04060b 88% 100%);
+      clip-path: polygon(0 100%, 0 55%, 5% 55%, 5% 30%, 10% 30%, 10% 65%, 15% 65%, 15% 20%, 22% 20%, 22% 72%, 28% 72%, 28% 40%, 34% 40%, 34% 58%, 40% 58%, 40% 22%, 47% 22%, 47% 67%, 54% 67%, 54% 34%, 60% 34%, 60% 78%, 67% 78%, 67% 25%, 74% 25%, 74% 61%, 81% 61%, 81% 38%, 88% 38%, 88% 70%, 94% 70%, 94% 28%, 100% 28%, 100% 100%);
     }
 
-    .hint {
-      position: absolute;
-      bottom: 12px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 14px;
-      opacity: .85;
-      text-align: center;
+    .content {
+      flex: 1;
+      padding: 22px 26px 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
     }
 
-    .bar {
-      width: 180px;
-      height: 12px;
-      background: rgba(255,255,255,.12);
-      border-radius: 999px;
-      overflow: hidden;
-      margin-top: 6px;
+    .title {
+      font-size: 30px;
+      font-weight: 800;
+      margin: 0;
     }
 
-    .bar > div {
-      height: 100%;
-      width: 100%;
-      background: linear-gradient(90deg, #35f28a, #1fbf63);
-      border-radius: 999px;
+    .sub {
+      margin: 0;
+      color: rgba(255,255,255,.75);
+      line-height: 1.8;
+      font-size: 15px;
     }
 
-    .bar.red > div {
-      background: linear-gradient(90deg, #ff6673, #ff2d4a);
-    }
-
-    .mobileBtns {
-      position: absolute;
-      bottom: 16px;
-      right: 16px;
-      display: none;
-      gap: 10px;
-      pointer-events: auto;
-    }
-
-    .btn {
-      width: 72px;
-      height: 72px;
+    .story {
+      flex: 1;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
       border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.08);
-      color: #fff;
-      font-size: 13px;
-      backdrop-filter: blur(6px);
+      padding: 18px;
+      line-height: 2.05;
+      font-size: 17px;
+      color: rgba(255,255,255,.95);
+      overflow: auto;
+      white-space: pre-line;
     }
 
-    @media (max-width: 900px) {
-      .mobileBtns { display: flex; }
-      .hint { font-size: 12px; width: 90%; }
+    .choices {
+      display: grid;
+      gap: 10px;
+    }
+
+    button {
+      font-size: 15px;
+      border: none;
+      padding: 14px 16px;
+      border-radius: 14px;
+      color: #fff;
+      background: linear-gradient(180deg, #2a4bff, #1730b8);
+      cursor: pointer;
+      transition: .2s;
+      text-align: right;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.08);
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: rgba(255,255,255,.7);
+      font-size: 13px;
+      flex-wrap: wrap;
+    }
+
+    .ghost {
+      background: linear-gradient(180deg, #3a3f55, #24293a);
+    }
+
+    .danger {
+      background: linear-gradient(180deg, #ff5a73, #c81f44);
+    }
+
+    .success {
+      background: linear-gradient(180deg, #20c97f, #0d8b57);
     }
   </style>
 </head>
 <body>
-  <canvas id="game"></canvas>
-
-  <div class="ui">
-    <div class="topbar">
-      <div class="panel">مرحله: <span id="level">1</span></div>
-      <div class="panel">امتیاز: <span id="score">0</span></div>
-      <div class="panel">جان: <span id="hpText">100</span>
-        <div class="bar red"><div id="hpBar"></div></div>
+  <div class="wrap">
+    <div class="card">
+      <div class="hero">
+        <div class="moon"></div>
+        <div class="city"></div>
       </div>
-      <div class="panel">مهمات: <span id="ammoText">∞</span></div>
-    </div>
 
-    <div class="crosshair"></div>
+      <div class="content">
+        <h1 class="title">شبِ آخر</h1>
+        <p class="sub">یک بازی داستانی تعاملی با چند پایان مختلف</p>
 
-    <div id="msg" class="centerMsg">
-      <h1>3D Shooter</h1>
-      <p>برای شروع کلیک کن</p>
-      <p>WASD حرکت | موس نگاه | کلیک شلیک | R ری‌لود</p>
-      <p>در موبایل: دکمه‌ها ظاهر می‌شوند</p>
-    </div>
+        <div id="story" class="story"></div>
 
-    <div class="hint">
-      دشمن‌ها را بزن، زنده بمان، مرحله را رد کن.
-    </div>
+        <div id="choices" class="choices"></div>
 
-    <div class="mobileBtns">
-      <button class="btn" id="btnShoot">شلیک</button>
-      <button class="btn" id="btnReload">ری‌لود</button>
+        <div class="footer">
+          <div>نکته: انتخاب‌ها داستان را تغییر می‌دهند</div>
+          <div><button id="restart" class="ghost">شروع دوباره</button></div>
+        </div>
+      </div>
     </div>
   </div>
 
   <script>
-    const canvas = document.getElementById('game');
-    const ctx = canvas.getContext('2d');
-    const msg = document.getElementById('msg');
-    const levelEl = document.getElementById('level');
-    const scoreEl = document.getElementById('score');
-    const hpText = document.getElementById('hpText');
-    const hpBar = document.getElementById('hpBar');
+    const storyEl = document.getElementById('story');
+    const choicesEl = document.getElementById('choices');
+    const restartBtn = document.getElementById('restart');
 
-    let W = innerWidth, H = innerHeight;
-    canvas.width = W; canvas.height = H;
-
-    addEventListener('resize', () => {
-      W = innerWidth; H = innerHeight;
-      canvas.width = W; canvas.height = H;
-    });
-
-    const keys = {};
-    let playing = false;
-    let score = 0;
-    let level = 1;
-    let hp = 100;
-    let ammo = 12;
-    let reloadTime = 0;
-    let lastShot = 0;
-    let spawnTimer = 0;
-
-    const player = {
-      x: 0, y: 0, z: 0,
-      angle: 0,
-      vx: 0, vz: 0
+    const scenes = {
+      start: {
+        text: `ساعت ۲:۱۳ نیمه‌شب بود.
+تو، «آراد»، در اتاق کوچکی در طبقه هفتم یک ساختمان قدیمی ایستاده‌ای.
+امشب باید تصمیم بگیری: شهر را ترک کنی، یا برای پیدا کردن خواهر گمشده‌ات به دل تاریکی بروی.
+از پنجره صدای آژیر از دور می‌آید و چراغ‌های خیابان یکی‌یکی خاموش می‌شوند.`,
+        choices: [
+          { text: 'از ساختمان خارج شوم و به خیابان بروم', next: 'street' },
+          { text: 'در ساختمان بمانم و اتاق خواهرم را بگردم', next: 'room' }
+        ]
+      },
+      street: {
+        text: `پله‌ها را دوتا یکی پایین می‌روی.
+در ورودی باز است. خیابان خیس از باران است و نور نئون مغازه‌ی بسته‌ای روی آسفالت می‌لرزد.
+در دوردست، مردی با بارانی مشکی زیر چراغ ایستاده و انگار منتظر توست.`,
+        choices: [
+          { text: 'به سمت مرد ناشناس بروم', next: 'man' },
+          { text: 'از کوچه‌ی کناری فرار کنم', next: 'alley' }
+        ]
+      },
+      room: {
+        text: `درِ اتاق خواهر کوچکت نیمه‌باز است.
+روی میز یک دفترچه‌ی آبی پیدا می‌کنی. آخرین صفحه فقط یک جمله دارد:
+"اگر امشب آمدند، به زیرزمین نرو."
+همان لحظه صدای ضربه‌ای از پایین ساختمان می‌شنوی.`,
+        choices: [
+          { text: 'دفترچه را بردارم و به زیرزمین بروم', next: 'basement' },
+          { text: 'دفترچه را بردارم و پنجره را برای فرار انتخاب کنم', next: 'roof' }
+        ]
+      },
+      man: {
+        text: `مرد ناشناس آرام سرش را بالا می‌آورد.
+چهره‌اش را نمی‌بینی، اما صدایش آشناست:
+"بالاخره آمدی، آراد. خواهرت اینجاست... ولی نه آن‌طور که فکر می‌کنی."
+او یک کلید زنگ‌زده به دستت می‌دهد.`,
+        choices: [
+          { text: 'کلید را بگیرم و به انبار متروکه بروم', next: 'warehouse' },
+          { text: 'به حرفش اعتماد نکنم و فرار کنم', next: 'alley' }
+        ]
+      },
+      alley: {
+        text: `در کوچه باریک می‌دوی.
+دیوارها نم‌کشیده‌اند و صدای قدم‌هایت بین سطل‌های زباله می‌پیچد.
+ناگهان یک در فلزی با علامت قرمز چشمک‌زن می‌بینی:
+"دسترسی ممنوع - آزمایشگاه زیرزمینی"`,
+        choices: [
+          { text: 'در را باز کنم و وارد آزمایشگاه شوم', next: 'lab' },
+          { text: 'دنبال راهی برای برگشتن به خیابان اصلی بگردم', next: 'street2' }
+        ]
+      },
+      basement: {
+        text: `پله‌های زیرزمین سرد و لغزان‌اند.
+در پایین، اتاقی پر از مانیتورهای خاموش و کابل‌های قطع‌شده می‌بینی.
+روی دیوار، با رنگ قرمز نوشته شده:
+"خواهر تو در اینجا نبود. او در زمان دیگری گیر افتاده است."`,
+        choices: [
+          { text: 'سرنخ را دنبال کنم و دستگاه خاموش را روشن کنم', next: 'timeMachine' },
+          { text: 'وحشت‌زده فرار کنم', next: 'endBad' }
+        ]
+      },
+      roof: {
+        text: `از پنجره بیرون می‌روی و روی لبه‌ی باریک پشت‌بام می‌ایستی.
+باد شدید است. آن‌طرف‌تر، چراغ یک برج مخابراتی می‌درخشد.
+روی زمین فلزی، علامتی دیده می‌شود که شبیه نقشه است.`,
+        choices: [
+          { text: 'به سمت برج بروم', next: 'tower' },
+          { text: 'از راه اضطراری پایین برگردم', next: 'street' }
+        ]
+      },
+      warehouse: {
+        text: `انبار متروکه بوی روغن و فلز می‌دهد.
+درون تاریکی، صدای دختر جوانی را می‌شنوی که می‌گوید:
+"آراد؟"
+اما وقتی چراغ‌قوه‌ات را روشن می‌کنی، فقط یک صندلی خالی و یک دستگاه قدیمی می‌بینی.
+روی صفحه‌ی دستگاه: "انتخاب آخر".`,
+        choices: [
+          { text: 'دستگاه را فعال کنم', next: 'timeMachine' },
+          { text: 'دنبال منبع صدا بگردم', next: 'endMystery' }
+        ]
+      },
+      lab: {
+        text: `در آزمایشگاه زیرزمینی، شیشه‌های شکسته و پرونده‌های پاره شده روی زمین پراکنده‌اند.
+در مرکز اتاق، اتاقکی شیشه‌ای قرار دارد.
+داخل آن... خواهر تو نیست.
+فقط یک تصویر هولوگرافیک از او که می‌گوید:
+"اگر این را دیدی، یعنی هنوز دیر نشده."`,
+        choices: [
+          { text: 'پیام را دنبال کنم و از تونل فرار کنم', next: 'timeMachine' },
+          { text: 'اتاقک شیشه‌ای را بشکنم', next: 'endBad' }
+        ]
+      },
+      street2: {
+        text: `وقتی به خیابان برمی‌گردی، شهر عجیب‌تر شده است.
+تابلوها خاموش‌اند و مردم انگار ناپدید شده‌اند.
+فقط یک نور آبی از انتهای خیابان به تو علامت می‌دهد.`,
+        choices: [
+          { text: 'به نور آبی بروم', next: 'tower' },
+          { text: 'پنهان شوم و صبر کنم', next: 'endNeutral' }
+        ]
+      },
+      tower: {
+        text: `برج مخابراتی مثل یک هیولا از دل مه بیرون آمده.
+پای آن، دری باز است و صدای یک دستگاه در حال کار به گوش می‌رسد.
+روی دیوار نوشته شده:
+"تنها یک نفر می‌تواند از دروازه عبور کند."`,
+        choices: [
+          { text: 'خودم را برای عبور آماده کنم', next: 'timeMachine' },
+          { text: 'برگردم و بیشتر فکر کنم', next: 'endNeutral' }
+        ]
+      },
+      timeMachine: {
+        text: `دستگاه روشن می‌شود و نور سفید همه‌جا را پر می‌کند.
+تو صدای خواهرَت را می‌شنوی:
+"آراد... من اینجام."
+اما تنها راه نجات این است که یک انتخاب نهایی کنی:
+بازگشت به گذشته یا بستن دروازه برای همیشه.`,
+        choices: [
+          { text: 'به گذشته بروم و او را نجات دهم', next: 'endGood' },
+          { text: 'دروازه را ببندم و شهر را نجات دهم', next: 'endSacrifice' }
+        ]
+      },
+      endGood: {
+        text: `تو به گذشته می‌پری.
+در لحظه‌ای کوتاه، خواهرَت را از حادثه نجات می‌دهی.
+وقتی به زمان حال برمی‌گردی، او کنار تو ایستاده است.
+شهر هنوز زخمی است، اما شما زنده‌اید.
+پایان خوب.`,
+        choices: [
+          { text: 'دوباره بازی کن', next: 'start' }
+        ]
+      },
+      endSacrifice: {
+        text: `تو دروازه را می‌بندی.
+نور خاموش می‌شود و سکوت همه‌جا را می‌گیرد.
+خواهرَت از آن سوی شیشه برای همیشه از دست می‌رود، اما شهر نجات پیدا می‌کند.
+اسم تو در هیچ‌جا ثبت نشد، اما بعضی قهرمان‌ها دیده نمی‌شوند.
+پایان فداکارانه.`,
+        choices: [
+          { text: 'دوباره بازی کن', next: 'start' }
+        ]
+      },
+      endBad: {
+        text: `هوا سرد می‌شود.
+نورها خاموش می‌شوند.
+تو یک قدم اشتباه برداشتی و داستان در تاریکی فرو رفت.
+پایان بد.`,
+        choices: [
+          { text: 'دوباره بازی کن', next: 'start' }
+        ]
+      },
+      endMystery: {
+        text: `دنبال صدا می‌گردی، اما فقط صدای قلب خودت را می‌شنوی.
+وقتی برمی‌گردی، درِ انبار بسته شده و راه خروج ناپدید شده است.
+بعضی رازها نباید دنبال شوند.
+پایان مرموز.`,
+        choices: [
+          { text: 'دوباره بازی کن', next: 'start' }
+        ]
+      },
+      endNeutral: {
+        text: `تو صبر می‌کنی...
+و شهر همان‌طور که هست، در مه گم می‌شود.
+نه پیروزی، نه شکست؛ فقط یک فرصت از دست‌رفته.
+پایان خنثی.`,
+        choices: [
+          { text: 'دوباره بازی کن', next: 'start' }
+        ]
+      }
     };
 
-    const bullets = [];
-    const enemies = [];
-    const particles = [];
-    const obstacles = [];
-
-    function rand(min, max) { return Math.random() * (max - min) + min; }
-    function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
-
-    function makeLevel(n) {
-      enemies.length = 0;
-      obstacles.length = 0;
-
-      const obsCount = 5 + n * 2;
-      for (let i = 0; i < obsCount; i++) {
-        obstacles.push({
-          x: rand(-18, 18),
-          z: rand(12, 80),
-          w: rand(2.5, 6),
-          h: rand(2.5, 7),
-          d: rand(2.5, 6)
-        });
-      }
-
-      const eCount = 4 + n * 3;
-      for (let i = 0; i < eCount; i++) spawnEnemy(true);
-    }
-
-    function spawnEnemy(initial=false) {
-      enemies.push({
-        x: rand(-20, 20),
-        y: 0,
-        z: initial ? rand(18, 95) : rand(45, 100),
-        hp: 2 + Math.floor(level / 2),
-        speed: rand(0.01, 0.025) + level * 0.002,
-        bob: rand(0, Math.PI * 2)
+    function showScene(name) {
+      const scene = scenes[name];
+      storyEl.textContent = scene.text;
+      choicesEl.innerHTML = '';
+      scene.choices.forEach(choice => {
+        const btn = document.createElement('button');
+        btn.textContent = choice.text;
+        btn.className = choice.next.startsWith('end') ? 'danger' : (choice.next === 'endGood' || choice.next === 'timeMachine' ? 'success' : '');
+        btn.onclick = () => showScene(choice.next);
+        choicesEl.appendChild(btn);
       });
     }
 
-    function resetGame() {
-      score = 0; level = 1; hp = 100; ammo = 12; reloadTime = 0; lastShot = 0;
-      player.x = 0; player.z = 0; player.angle = 0;
-      bullets.length = 0; particles.length = 0;
-      makeLevel(level);
-      updateUI();
-      msg.classList.remove('hidden');
-      msg.innerHTML = `
-        <h1>3D Shooter</h1>
-        <p>کلیک کن و شروع کن</p>
-        <p>WASD حرکت | موس نگاه | کلیک شلیک | R ری‌لود</p>
-      `;
-      playing = false;
-    }
+    restartBtn.onclick = () => showScene('start');
 
-    function updateUI() {
-      levelEl.textContent = level;
-      scoreEl.textContent = score;
-      hpText.textContent = Math.max(0, Math.floor(hp));
-      hpBar.style.width = clamp(hp, 0, 100) + '%';
-    }
-
-    function shoot() {
-      const now = performance.now();
-      if (!playing || now - lastShot < 170 || reloadTime > 0) return;
-      if (ammo <= 0) return;
-      ammo--;
-      lastShot = now;
-      for (let i = 0; i < 6; i++) {
-        particles.push({
-          x: player.x,
-          y: 0.5,
-          z: player.z,
-          vx: Math.sin(player.angle) * rand(0.1, 0.2) + rand(-0.02, 0.02),
-          vy: rand(0.01, 0.04),
-          vz: Math.cos(player.angle) * rand(0.1, 0.2) + rand(-0.02, 0.02),
-          life: 22
-        });
-      }
-
-      bullets.push({
-        x: player.x,
-        y: 0.8,
-        z: player.z,
-        vx: Math.sin(player.angle) * 1.2,
-        vz: Math.cos(player.angle) * 1.2,
-        life: 80
-      });
-      updateUI();
-    }
-
-    function reload() {
-      if (!playing || reloadTime > 0 || ammo === 12) return;
-      reloadTime = 50;
-      setTimeout(() => { ammo = 12; reloadTime = 0; updateUI(); }, 800);
-    }
-
-    function hitEffect(x, z, color='#ffcc55') {
-      for (let i = 0; i < 18; i++) particles.push({
-        x, y: 0.4, z,
-        vx: rand(-0.12, 0.12),
-        vy: rand(0.01, 0.09),
-        vz: rand(-0.12, 0.12),
-        life: rand(18, 35),
-        color
-      });
-    }
-
-    function project(x, y, z) {
-      const dx = x - player.x;
-      const dz = z - player.z;
-      const sin = Math.sin(-player.angle);
-      const cos = Math.cos(-player.angle);
-      const rx = dx * cos - dz * sin;
-      const rz = dx * sin + dz * cos;
-      if (rz <= 0.1) return null;
-      const f = 900 / rz;
-      return {
-        x: W / 2 + rx * f,
-        y: H / 2 - y * f,
-        s: f
-      };
-    }
-
-    function drawSky() {
-      const g = ctx.createLinearGradient(0, 0, 0, H);
-      g.addColorStop(0, '#10203f');
-      g.addColorStop(0.5, '#0b1020');
-      g.addColorStop(1, '#04060b');
-      ctx.fillStyle = g;
-      ctx.fillRect(0, 0, W, H);
-
-      for (let i = 0; i < 30; i++) {
-        const x = (i * 173 + (performance.now() * 0.01)) % W;
-        ctx.fillStyle = 'rgba(255,255,255,.25)';
-        ctx.fillRect(x, 50 + (i % 6) * 18, 2, 2);
-      }
-    }
-
-    function drawGround() {
-      ctx.save();
-      ctx.translate(W / 2, H * 0.78);
-      ctx.fillStyle = '#071114';
-      ctx.fillRect(-W, 0, W * 2, H);
-      ctx.restore();
-
-      for (let i = 0; i < 28; i++) {
-        const z = i * 6 + ((performance.now() * 0.02) % 6);
-        const p1 = project(-35, 0, z + 1);
-        const p2 = project(35, 0, z + 1);
-        if (!p1 || !p2) continue;
-        ctx.strokeStyle = 'rgba(120,200,255,.06)';
-        ctx.beginPath();
-        ctx.moveTo(p1.x, p1.y);
-        ctx.lineTo(p2.x, p2.y);
-        ctx.stroke();
-      }
-    }
-
-    function drawBox(obj, color1, color2) {
-      const p = project(obj.x, obj.y, obj.z);
-      if (!p) return;
-      const size = p.s * obj.w;
-      const h = p.s * obj.h;
-      if (size < 2 || h < 2) return;
-      const x = p.x, y = p.y;
-      const grad = ctx.createLinearGradient(x - size/2, y - h, x + size/2, y + h);
-      grad.addColorStop(0, color1);
-      grad.addColorStop(1, color2);
-      ctx.fillStyle = grad;
-      ctx.fillRect(x - size/2, y - h, size, h);
-      ctx.strokeStyle = 'rgba(255,255,255,.12)';
-      ctx.strokeRect(x - size/2, y - h, size, h);
-    }
-
-    function update(dt) {
-      if (!playing) return;
-
-      const speed = 0.06 + level * 0.003;
-      if (keys['w'] || keys['ArrowUp']) { player.x += Math.sin(player.angle) * speed; player.z += Math.cos(player.angle) * speed; }
-      if (keys['s'] || keys['ArrowDown']) { player.x -= Math.sin(player.angle) * speed; player.z -= Math.cos(player.angle) * speed; }
-      if (keys['a'] || keys['ArrowLeft']) { player.angle -= 0.045; }
-      if (keys['d'] || keys['ArrowRight']) { player.angle += 0.045; }
-
-      player.x = clamp(player.x, -24, 24);
-      player.z = clamp(player.z, -8, 18);
-
-      bullets.forEach(b => {
-        b.x += b.vx;
-        b.z += b.vz;
-        b.life--;
-      });
-
-      enemies.forEach(e => {
-        const dx = player.x - e.x;
-        const dz = player.z - e.z;
-        const dist = Math.hypot(dx, dz);
-        e.x += dx / dist * e.speed;
-        e.z += dz / dist * e.speed;
-        e.bob += 0.08;
-        if (dist < 1.4) {
-          hp -= 0.25 * (1 + level * 0.15);
-          if (hp <= 0) endGame();
-        }
-      });
-
-      bullets.forEach(b => {
-        enemies.forEach(e => {
-          const d = Math.hypot(b.x - e.x, b.z - e.z);
-          if (d < 1.2) {
-            e.hp--;
-            b.life = 0;
-            hitEffect(e.x, e.z);
-            if (e.hp <= 0) {
-              score += 10;
-              enemies.splice(enemies.indexOf(e), 1);
-              hitEffect(e.x, e.z, '#ff5577');
-            }
-          }
-        });
-      });
-
-      particles.forEach(p => {
-        p.x += p.vx; p.y += p.vy; p.z += p.vz;
-        p.vy -= 0.003;
-        p.life--;
-      });
-
-      bullets.filter(b => b.life > 0);
-      for (let i = bullets.length - 1; i >= 0; i--) if (bullets[i].life <= 0) bullets.splice(i, 1);
-      for (let i = particles.length - 1; i >= 0; i--) if (particles[i].life <= 0) particles.splice(i, 1);
-
-      spawnTimer++;
-      if (spawnTimer > 240 - level * 12) {
-        spawnTimer = 0;
-        if (enemies.length < 8 + level * 2) spawnEnemy();
-      }
-
-      if (enemies.length === 0) {
-        level++;
-        score += 50;
-        hp = Math.min(100, hp + 20);
-        ammo = 12;
-        makeLevel(level);
-      }
-
-      updateUI();
-    }
-
-    function render() {
-      drawSky();
-      drawGround();
-
-      obstacles.slice().sort((a,b)=>b.z-a.z).forEach(o => {
-        const p = project(o.x, 0, o.z);
-        if (!p) return;
-        const w = p.s * o.w;
-        const h = p.s * o.h;
-        if (w < 2 || h < 2) return;
-        ctx.fillStyle = 'rgba(80,120,160,.35)';
-        ctx.fillRect(p.x - w/2, p.y - h, w, h);
-        ctx.strokeStyle = 'rgba(180,220,255,.14)';
-        ctx.strokeRect(p.x - w/2, p.y - h, w, h);
-      });
-
-      enemies.slice().sort((a,b)=>b.z-a.z).forEach(e => {
-        const p = project(e.x, e.bob * 0.15, e.z);
-        if (!p) return;
-        const size = p.s * 0.9;
-        ctx.fillStyle = '#ff3c6e';
-        ctx.beginPath();
-        ctx.arc(p.x, p.y - size * 0.55, size * 0.35, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = '#7a1732';
-        ctx.fillRect(p.x - size * 0.22, p.y - size * 0.15, size * 0.44, size * 0.45);
-        ctx.strokeStyle = 'rgba(255,255,255,.15)';
-        ctx.strokeRect(p.x - size * 0.22, p.y - size * 0.15, size * 0.44, size * 0.45);
-      });
-
-      bullets.forEach(b => {
-        const p = project(b.x, 0.8, b.z);
-        if (!p) return;
-        ctx.fillStyle = '#ffe17a';
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, Math.max(2, p.s * 0.08), 0, Math.PI * 2);
-        ctx.fill();
-      });
-
-      particles.forEach(p => {
-        const pr = project(p.x, p.y, p.z);
-        if (!pr) return;
-        ctx.fillStyle = p.color || 'rgba(255,210,90,.85)';
-        ctx.fillRect(pr.x, pr.y, 2, 2);
-      });
-
-      ctx.fillStyle = 'rgba(255,255,255,.06)';
-      ctx.fillRect(0, H*0.78, W, H*0.22);
-    }
-
-    function loop(t) {
-      update(16);
-      render();
-      requestAnimationFrame(loop);
-    }
-
-    function endGame() {
-      playing = false;
-      msg.classList.remove('hidden');
-      msg.innerHTML = `<h1>Game Over</h1><p>امتیاز: ${score}</p><p>برای شروع دوباره کلیک کن</p>`;
-    }
-
-    addEventListener('keydown', e => {
-      keys[e.key.toLowerCase()] = true;
-      if (e.key.toLowerCase() === 'r') reload();
-    });
-    addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
-
-    addEventListener('click', () => {
-      if (!playing) {
-        playing = true;
-        msg.classList.add('hidden');
-        return;
-      }
-      shoot();
-    });
-
-    addEventListener('mousemove', e => {
-      if (!playing) return;
-      player.angle += (e.movementX || 0) * 0.002;
-    });
-
-    document.getElementById('btnShoot').addEventListener('click', shoot);
-    document.getElementById('btnReload').addEventListener('click', reload);
-
-    resetGame();
-    requestAnimationFrame(loop);
+    showScene('start');
   </script>
+  nima khaldi
 </body>
 </html>
-```
