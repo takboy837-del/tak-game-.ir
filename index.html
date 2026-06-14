@@ -2,397 +2,528 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-  <title>بازی ۳بعدی غمگین</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>مپ‌ساز حرفه‌ای نهایی</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Tahoma, Arial, sans-serif; }
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background: #050816;
-      color: white;
+    * {
+      box-sizing: border-box;
+      font-family: sans-serif;
+      user-select: none;
     }
+
     body {
-      position: relative;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      background: #121212;
+      color: #fff;
+      overflow: hidden;
     }
-    #ui {
-      position: fixed;
-      top: 16px;
-      right: 16px;
-      z-index: 20;
-      background: rgba(0,0,0,0.45);
-      border: 1px solid rgba(255,255,255,0.12);
-      padding: 14px 16px;
-      border-radius: 16px;
-      backdrop-filter: blur(8px);
-      min-width: 220px;
-      box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+
+    .sidebar {
+      width: 340px;
+      background: #232323;
+      border-left: 1px solid #3c3c3c;
+      padding: 14px;
+      overflow-y: auto;
     }
-    #ui h2 {
-      font-size: 18px;
-      margin-bottom: 8px;
-      color: #f8fafc;
+
+    .sidebar h2 {
+      margin: 0 0 12px;
+      font-size: 22px;
     }
-    #ui div {
-      margin-top: 6px;
-      font-size: 14px;
-      color: #e2e8f0;
-    }
-    button {
-      margin-top: 10px;
-      width: 100%;
-      border: none;
-      background: linear-gradient(90deg, #7c3aed, #ec4899);
-      color: white;
-      padding: 10px 12px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    #help {
-      position: fixed;
-      bottom: 16px;
-      right: 16px;
-      z-index: 20;
-      background: rgba(0,0,0,0.35);
-      padding: 12px 14px;
+
+    .section {
+      background: #2b2b2b;
       border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 14px;
+    }
+
+    .section h3 {
+      margin: 0 0 10px;
+      font-size: 15px;
+    }
+
+    .tool-btn, .action-btn {
+      width: 100%;
+      margin: 5px 0;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      background: #444;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .tool-btn:hover, .action-btn:hover {
+      background: #555;
+    }
+
+    .tool-btn.active {
+      background: #0b84ff;
+    }
+
+    .action-btn.primary {
+      background: #0b84ff;
+    }
+
+    .action-btn.danger {
+      background: #e53935;
+    }
+
+    input, select {
+      width: 100%;
+      margin-top: 6px;
+      padding: 9px;
+      border-radius: 8px;
+      border: 1px solid #555;
+      background: #1b1b1b;
+      color: white;
+      outline: none;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .info {
       font-size: 13px;
       line-height: 1.8;
-      max-width: 300px;
-      border: 1px solid rgba(255,255,255,0.1);
-      color: #e5e7eb;
+      color: #ddd;
+      background: #1d1d1d;
+      padding: 10px;
+      border-radius: 10px;
     }
-    #subtitle {
-      position: fixed;
-      left: 50%;
-      bottom: 52px;
-      transform: translateX(-50%);
+
+    .main {
+      flex: 1;
+      position: relative;
+      background: #111;
+      overflow: hidden;
+    }
+
+    .topbar {
+      position: absolute;
+      top: 10px;
+      left: 10px;
       z-index: 30;
-      max-width: 90vw;
-      padding: 12px 18px;
-      border-radius: 16px;
-      background: rgba(0,0,0,0.62);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: #ffffff;
-      font-size: 18px;
-      line-height: 2;
-      text-align: center;
-      display: none;
-      box-shadow: 0 12px 35px rgba(0,0,0,0.3);
+      background: rgba(0,0,0,0.6);
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 13px;
+      backdrop-filter: blur(6px);
     }
-    #message {
-      position: fixed;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 40;
-      background: rgba(0,0,0,0.72);
-      padding: 20px 24px;
-      border-radius: 20px;
-      color: white;
-      font-size: 24px;
-      text-align: center;
-      display: none;
-      max-width: 90vw;
+
+    .canvas {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(#2f7d32, #2f7d32);
     }
-    #orientationWarn {
-      position: fixed;
-      inset: 0;
-      background: rgba(5,8,22,0.96);
-      z-index: 100;
-      display: none;
+
+    .map {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2400px;
+      height: 1600px;
+      transform-origin: 0 0;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,0.08) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.08) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .tile {
+      width: 40px;
+      height: 40px;
+      position: absolute;
+      display: flex;
       align-items: center;
       justify-content: center;
-      text-align: center;
-      padding: 24px;
+      cursor: pointer;
       font-size: 24px;
-      line-height: 2;
-      color: #fff;
+      transform-origin: center center;
     }
-    @media (orientation: portrait) {
-      #orientationWarn { display: flex; }
-      #ui, #help, #subtitle, #message { filter: blur(0.2px); }
+
+    .floor { background: rgba(255,255,255,0.12); }
+    .wall { background: #8d6e63; border: 1px solid #5d4037; }
+    .wallInner { background: #c8b39c; border: 1px solid #8d7b70; }
+    .door { background: #6d4c41; border: 1px solid #3e2723; font-size: 20px; }
+    .window { background: #90caf9; border: 1px solid #1565c0; font-size: 20px; }
+    .tree { background: transparent; font-size: 30px; }
+    .furniture, .kitchen, .decor { background: transparent; }
+
+    .selected {
+      outline: 2px solid #00e5ff;
+      z-index: 9999;
+    }
+
+    .ghost {
+      opacity: 0.45;
+    }
+
+    .hint {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      z-index: 30;
+      background: rgba(0,0,0,0.55);
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      color: #ddd;
     }
   </style>
 </head>
 <body>
-  <div id="orientationWarn">لطفاً گوشی را به صورت افقی نگه دار</div>
+  <div class="sidebar">
+    <h2>مپ‌ساز نهایی</h2>
 
-  <div id="ui">
-    <h2>بازی ۳بعدی غمگین</h2>
-    <div>جان: <span id="health">100</span></div>
-    <div>امتیاز: <span id="score">0</span></div>
-    <div>آیتم‌ها: <span id="items">0</span></div>
-    <button onclick="restartGame()">شروع مجدد</button>
+    <div class="section">
+      <h3>ابزارها</h3>
+      <button class="tool-btn active" data-tool="select">انتخاب / جابجایی</button>
+      <button class="tool-btn" data-tool="floor">کف</button>
+      <button class="tool-btn" data-tool="wall">دیوار بیرونی</button>
+      <button class="tool-btn" data-tool="wallInner">دیوار داخلی</button>
+      <button class="tool-btn" data-tool="door">در</button>
+      <button class="tool-btn" data-tool="window">پنجره</button>
+      <button class="tool-btn" data-tool="tree">درخت</button>
+      <button class="tool-btn" data-tool="furniture">مبلمان</button>
+      <button class="tool-btn" data-tool="kitchen">آشپزخانه</button>
+      <button class="tool-btn" data-tool="decor">دکور</button>
+      <button class="tool-btn" data-tool="erase">حذف</button>
+    </div>
+
+    <div class="section">
+      <h3>تنظیمات</h3>
+
+      <label>رنگ دیوار بیرونی:</label>
+      <input type="color" id="wallColor" value="#8d6e63">
+
+      <label>رنگ دیوار داخلی:</label>
+      <input type="color" id="innerWallColor" value="#c8b39c">
+
+      <label>رنگ کف:</label>
+      <input type="color" id="floorColor" value="#e0d7d1">
+
+      <label>مبلمان:</label>
+      <select id="furnitureItem">
+        <option value="🛋️">مبل</option>
+        <option value="🛏️">تخت</option>
+        <option value="🪑">صندلی</option>
+        <option value="📺">تلویزیون</option>
+        <option value="🗄️">کمد</option>
+        <option value="🪞">آینه</option>
+        <option value="🛌">تخت خواب</option>
+      </select>
+
+      <label>وسایل آشپزخانه:</label>
+      <select id="kitchenItem">
+        <option value="🧊">یخچال</option>
+        <option value="🔥">اجاق</option>
+        <option value="🚰">سینک</option>
+        <option value="🍽️">کابینت</option>
+        <option value="🍳">گاز</option>
+        <option value="🧽">ماشین ظرفشویی</option>
+        <option value="🪑">صندلی</option>
+        <option value="🪵">میز</option>
+        <option value="☕">قهوه‌ساز</option>
+        <option value="🥘">قابلمه</option>
+        <option value="🍞">توستر</option>
+      </select>
+
+      <label>دکور:</label>
+      <select id="decorItem">
+        <option value="🖼️">تابلو</option>
+        <option value="🪴">گلدان</option>
+        <option value="🕯️">شمع</option>
+        <option value="📚">کتاب</option>
+        <option value="🧸">عروسک</option>
+        <option value="🪟">قاب</option>
+        <option value="🏮">چراغ</option>
+      </select>
+
+      <div class="row">
+        <button class="action-btn primary" id="rotateBtn">چرخش</button>
+        <button class="action-btn danger" id="deleteBtn">حذف انتخاب</button>
+      </div>
+
+      <div class="row">
+        <button class="action-btn" id="zoomIn">زوم +</button>
+        <button class="action-btn" id="zoomOut">زوم -</button>
+      </div>
+
+      <button class="action-btn danger" id="clearBtn">پاک کردن همه</button>
+    </div>
+
+    <div class="section info" id="info">
+      ابزار فعال: <b>انتخاب / جابجایی</b><br>
+      - دیوار را با کلیک بساز<br>
+      - روی آیتم‌ها کلیک کن و Drag کن<br>
+      - در و پنجره با دوبار کلیک باز/بسته می‌شوند<br>
+      - راست‌کلیک روی آیتم = حذف سریع
+    </div>
   </div>
 
-  <div id="help">
-    حرکت: W A S D<br>
-    داستان با زیرنویس فارسی نمایش داده می‌شود.<br>
-    از دشمن‌ها دوری کن و آیتم‌ها را جمع کن.
+  <div class="main">
+    <div class="canvas" id="canvas">
+      <div class="topbar">ساخت نمای داخلی و بیرونی — مپ‌ساز حرفه‌ای</div>
+      <div class="map" id="map"></div>
+      <div class="hint">نکته: برای ساخت اتاق، اول کف بگذار، بعد دیوارها را دورش بچین، بعد در و پنجره و وسایل را اضافه کن.</div>
+    </div>
   </div>
 
-  <div id="subtitle"></div>
-  <div id="message"></div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
-    let scene, camera, renderer, player, ground;
-    let enemies = [];
-    let collectibles = [];
-    let keys = {};
-    let health = 100;
-    let score = 0;
-    let itemCount = 0;
-    let gameOver = false;
-    let clock = new THREE.Clock();
-    let subtitlesQueue = [];
+    const map = document.getElementById("map");
+    const canvas = document.getElementById("canvas");
+    const toolButtons = document.querySelectorAll(".tool-btn");
+    const info = document.getElementById("info");
 
-    const healthEl = document.getElementById("health");
-    const scoreEl = document.getElementById("score");
-    const itemsEl = document.getElementById("items");
-    const messageEl = document.getElementById("message");
-    const subtitleEl = document.getElementById("subtitle");
+    const wallColor = document.getElementById("wallColor");
+    const innerWallColor = document.getElementById("innerWallColor");
+    const floorColor = document.getElementById("floorColor");
+    const furnitureItem = document.getElementById("furnitureItem");
+    const kitchenItem = document.getElementById("kitchenItem");
+    const decorItem = document.getElementById("decorItem");
 
-    const storyLines = [
-      "آن روز، آسمان دیگر آبی نبود...",
-      "شهر در سکوتی سنگین فرو رفته بود.",
-      "من و او، آخرین کسانی بودیم که هنوز امید را با خود حمل می‌کردیم.",
-      "او گفت: اگر من برنگشتم، ادامه بده...",
-      "اما من برگشتم، و او دیگر نبود.",
-      "از آن لحظه به بعد، هر قدمم برای رسیدن به خاطره‌ای بود که دیگر وجود نداشت."
-    ];
+    const rotateBtn = document.getElementById("rotateBtn");
+    const deleteBtn = document.getElementById("deleteBtn");
+    const zoomIn = document.getElementById("zoomIn");
+    const zoomOut = document.getElementById("zoomOut");
+    const clearBtn = document.getElementById("clearBtn");
 
-    init();
-    startStory();
-    animate();
+    let currentTool = "select";
+    let selected = null;
+    let dragging = null;
+    let dragOffsetX = 0;
+    let dragOffsetY = 0;
+    let scale = 1;
+    const grid = 40;
 
-    function init() {
-      scene = new THREE.Scene();
-      scene.background = new THREE.Color(0x050816);
-      scene.fog = new THREE.Fog(0x050816, 20, 130);
+    function setTool(tool) {
+      currentTool = tool;
+      toolButtons.forEach(btn => btn.classList.remove("active"));
+      document.querySelector(`[data-tool="${tool}"]`).classList.add("active");
 
-      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-      camera.position.set(0, 7, 14);
+      const labels = {
+        select: "انتخاب / جابجایی",
+        floor: "کف",
+        wall: "دیوار بیرونی",
+        wallInner: "دیوار داخلی",
+        door: "در",
+        window: "پنجره",
+        tree: "درخت",
+        furniture: "مبلمان",
+        kitchen: "آشپزخانه",
+        decor: "دکور",
+        erase: "حذف"
+      };
 
-      renderer = new THREE.WebGLRenderer({ antialias: true });
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.shadowMap.enabled = true;
-      document.body.appendChild(renderer.domElement);
-
-      const ambient = new THREE.AmbientLight(0xffffff, 0.45);
-      scene.add(ambient);
-
-      const moonLight = new THREE.DirectionalLight(0x9ca3af, 0.9);
-      moonLight.position.set(-12, 24, 10);
-      moonLight.castShadow = true;
-      scene.add(moonLight);
-
-      const groundGeo = new THREE.PlaneGeometry(320, 320);
-      const groundMat = new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 1, metalness: 0 });
-      ground = new THREE.Mesh(groundGeo, groundMat);
-      ground.rotation.x = -Math.PI / 2;
-      ground.receiveShadow = true;
-      scene.add(ground);
-
-      // ruins / obstacles
-      for (let i = 0; i < 35; i++) {
-        const ruin = new THREE.Mesh(
-          new THREE.BoxGeometry(
-            rand(1.5, 6),
-            rand(1.5, 8),
-            rand(1.5, 6)
-          ),
-          new THREE.MeshStandardMaterial({ color: 0x374151, roughness: 1 })
-        );
-        ruin.position.set(rand(-130, 130), ruin.geometry.parameters.height / 2, rand(-130, 130));
-        ruin.rotation.y = rand(0, Math.PI);
-        scene.add(ruin);
-      }
-
-      // dead trees
-      for (let i = 0; i < 28; i++) {
-        const trunk = new THREE.Mesh(
-          new THREE.CylinderGeometry(0.35, 0.5, 4.2, 7),
-          new THREE.MeshStandardMaterial({ color: 0x4b5563 })
-        );
-        trunk.position.set(rand(-135, 135), 2.1, rand(-135, 135));
-        scene.add(trunk);
-
-        const top = new THREE.Mesh(
-          new THREE.SphereGeometry(1.5, 8, 8),
-          new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 1 })
-        );
-        top.position.set(trunk.position.x, 4.4, trunk.position.z);
-        scene.add(top);
-      }
-
-      // player
-      const playerGeo = new THREE.BoxGeometry(1, 2, 1);
-      const playerMat = new THREE.MeshStandardMaterial({ color: 0xf472b6, roughness: 0.7 });
-      player = new THREE.Mesh(playerGeo, playerMat);
-      player.position.set(0, 1, 0);
-      player.castShadow = true;
-      scene.add(player);
-
-      spawnEnemies(10);
-      spawnCollectibles(14);
-
-      window.addEventListener("resize", onWindowResize);
-      window.addEventListener("keydown", e => keys[e.key.toLowerCase()] = true);
-      window.addEventListener("keyup", e => keys[e.key.toLowerCase()] = false);
+      info.innerHTML = `ابزار فعال: <b>${labels[tool]}</b><br>
+      - دیوار را با کلیک بساز<br>
+      - روی آیتم‌ها کلیک کن و Drag کن<br>
+      - در و پنجره با دوبار کلیک باز/بسته می‌شوند<br>
+      - راست‌کلیک روی آیتم = حذف سریع`;
     }
 
-    function startStory() {
-      let i = 0;
-      subtitlesQueue = [...storyLines];
-      showNextSubtitle();
-      function showNextSubtitle() {
-        if (i >= subtitlesQueue.length) {
-          subtitleEl.style.display = "none";
+    function snap(v) {
+      return Math.round(v / grid) * grid;
+    }
+
+    function clearSelected() {
+      if (selected) selected.classList.remove("selected");
+      selected = null;
+    }
+
+    function setSelected(el) {
+      clearSelected();
+      selected = el;
+      el.classList.add("selected");
+    }
+
+    function createItem(type, x, y, data = {}) {
+      const el = document.createElement("div");
+      el.className = "tile";
+      el.dataset.type = type;
+      el.dataset.rotation = data.rotation || "0";
+      el.style.left = x + "px";
+      el.style.top = y + "px";
+      el.style.transform = `rotate(${el.dataset.rotation}deg)`;
+
+      if (type === "floor") {
+        el.classList.add("floor");
+        el.style.background = data.color || floorColor.value;
+      } else if (type === "wall") {
+        el.classList.add("wall");
+        el.style.background = data.color || wallColor.value;
+      } else if (type === "wallInner") {
+        el.classList.add("wallInner");
+        el.style.background = data.color || innerWallColor.value;
+      } else if (type === "door") {
+        el.classList.add("door");
+        el.textContent = "🚪";
+        el.dataset.open = data.open ? "1" : "0";
+        el.style.opacity = data.open ? "0.7" : "1";
+      } else if (type === "window") {
+        el.classList.add("window");
+        el.textContent = "🪟";
+        el.dataset.open = data.open ? "1" : "0";
+        el.style.opacity = data.open ? "1" : "0.75";
+      } else if (type === "tree") {
+        el.classList.add("tree");
+        el.textContent = "🌳";
+      } else if (type === "furniture") {
+        el.classList.add("furniture");
+        el.textContent = data.icon || "🛋️";
+      } else if (type === "kitchen") {
+        el.classList.add("kitchen");
+        el.textContent = data.icon || "🧊";
+      } else if (type === "decor") {
+        el.classList.add("decor");
+        el.textContent = data.icon || "🖼️";
+      }
+
+      el.addEventListener("click", (e) => {
+        e.stopPropagation();
+
+        if (currentTool === "erase") {
+          el.remove();
+          if (selected === el) clearSelected();
           return;
         }
-        subtitleEl.innerText = subtitlesQueue[i];
-        subtitleEl.style.display = "block";
-        i++;
-        setTimeout(showNextSubtitle, 3500);
-      }
-    }
 
-    function spawnEnemies(n) {
-      for (let i = 0; i < n; i++) {
-        const enemy = new THREE.Mesh(
-          new THREE.BoxGeometry(1.2, 1.8, 1.2),
-          new THREE.MeshStandardMaterial({ color: 0x7f1d1d, roughness: 1 })
-        );
-        enemy.position.set(rand(-110, 110), 0.9, rand(-110, 110));
-        enemy.userData.speed = 0.55 + Math.random() * 0.75;
-        scene.add(enemy);
-        enemies.push(enemy);
-      }
-    }
-
-    function spawnCollectibles(n) {
-      for (let i = 0; i < n; i++) {
-        const item = new THREE.Mesh(
-          new THREE.SphereGeometry(0.45, 12, 12),
-          new THREE.MeshStandardMaterial({ color: 0xfacc15, emissive: 0x553c06 })
-        );
-        item.position.set(rand(-120, 120), 0.5, rand(-120, 120));
-        scene.add(item);
-        collectibles.push(item);
-      }
-    }
-
-    function animate() {
-      requestAnimationFrame(animate);
-      const delta = clock.getDelta();
-
-      if (!gameOver && !isPortrait()) {
-        movePlayer(delta);
-        moveEnemies(delta);
-        checkCollectibles();
-        updateCamera();
-      }
-
-      renderer.render(scene, camera);
-    }
-
-    function movePlayer(delta) {
-      const speed = 12 * delta;
-
-      if (keys["w"]) player.position.z -= speed;
-      if (keys["s"]) player.position.z += speed;
-      if (keys["a"]) player.position.x -= speed;
-      if (keys["d"]) player.position.x += speed;
-
-      if (keys["w"]) player.rotation.y = Math.PI;
-      if (keys["s"]) player.rotation.y = 0;
-      if (keys["a"]) player.rotation.y = Math.PI / 2;
-      if (keys["d"]) player.rotation.y = -Math.PI / 2;
-
-      player.position.x = clamp(player.position.x, -145, 145);
-      player.position.z = clamp(player.position.z, -145, 145);
-    }
-
-    function moveEnemies(delta) {
-      enemies.forEach(enemy => {
-        const dir = new THREE.Vector3().subVectors(player.position, enemy.position).normalize();
-        enemy.position.addScaledVector(dir, enemy.userData.speed * delta);
-
-        const dist = enemy.position.distanceTo(player.position);
-        if (dist < 1.6) {
-          health -= 18 * delta;
-          health = Math.max(0, health);
-          healthEl.innerText = Math.floor(health);
-          if (health <= 0) endGame();
-        }
+        setSelected(el);
       });
-    }
 
-    function checkCollectibles() {
-      collectibles.forEach((item, index) => {
-        if (!item) return;
-        const dist = item.position.distanceTo(player.position);
-        if (dist < 1.4) {
-          scene.remove(item);
-          collectibles[index] = null;
-          score += 10;
-          itemCount += 1;
-          scoreEl.innerText = score;
-          itemsEl.innerText = itemCount;
+      el.addEventListener("dblclick", (e) => {
+        e.stopPropagation();
+        if (type === "door") {
+          const open = el.dataset.open === "1";
+          el.dataset.open = open ? "0" : "1";
+          el.style.opacity = open ? "1" : "0.7";
+        }
+        if (type === "window") {
+          const open = el.dataset.open === "1";
+          el.dataset.open = open ? "0" : "1";
+          el.style.opacity = open ? "0.75" : "1";
         }
       });
 
-      if (itemCount >= 14 && !gameOver) {
-        showMessage("او دیگر بازنمی‌گردد... اما تو هنوز زنده‌ای.");
-        gameOver = true;
+      el.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+        el.remove();
+        if (selected === el) clearSelected();
+      });
+
+      el.addEventListener("mousedown", (e) => {
+        if (currentTool === "select") {
+          dragging = el;
+          setSelected(el);
+          const rect = el.getBoundingClientRect();
+          dragOffsetX = e.clientX - rect.left;
+          dragOffsetY = e.clientY - rect.top;
+        }
+      });
+
+      map.appendChild(el);
+      return el;
+    }
+
+    document.addEventListener("mousemove", (e) => {
+      if (!dragging) return;
+      const rect = map.getBoundingClientRect();
+      const x = snap((e.clientX - rect.left - dragOffsetX) / scale);
+      const y = snap((e.clientY - rect.top - dragOffsetY) / scale);
+      dragging.style.left = x + "px";
+      dragging.style.top = y + "px";
+    });
+
+    document.addEventListener("mouseup", () => {
+      dragging = null;
+    });
+
+    map.addEventListener("click", (e) => {
+      const rect = map.getBoundingClientRect();
+      const x = snap((e.clientX - rect.left) / scale);
+      const y = snap((e.clientY - rect.top) / scale);
+
+      if (currentTool === "floor") createItem("floor", x, y, { color: floorColor.value });
+      else if (currentTool === "wall") createItem("wall", x, y, { color: wallColor.value });
+      else if (currentTool === "wallInner") createItem("wallInner", x, y, { color: innerWallColor.value });
+      else if (currentTool === "door") createItem("door", x, y, { open: false });
+      else if (currentTool === "window") createItem("window", x, y, { open: false });
+      else if (currentTool === "tree") createItem("tree", x, y);
+      else if (currentTool === "furniture") createItem("furniture", x, y, { icon: furnitureItem.value });
+      else if (currentTool === "kitchen") createItem("kitchen", x, y, { icon: kitchenItem.value });
+      else if (currentTool === "decor") createItem("decor", x, y, { icon: decorItem.value });
+      else if (currentTool === "erase") {
+        const target = document.elementFromPoint(e.clientX, e.clientY);
+        if (target && target.classList.contains("tile")) target.remove();
+      } else if (currentTool === "select") {
+        const target = document.elementFromPoint(e.clientX, e.clientY);
+        if (target && target.classList.contains("tile")) setSelected(target);
+        else clearSelected();
       }
-    }
+    });
 
-    function updateCamera() {
-      const offset = new THREE.Vector3(0, 7, 14);
-      const desiredPos = player.position.clone().add(offset);
-      camera.position.lerp(desiredPos, 0.08);
-      camera.lookAt(player.position.x, player.position.y + 1, player.position.z);
-    }
+    rotateBtn.addEventListener("click", () => {
+      if (!selected) return alert("اول یک آیتم را انتخاب کن.");
+      let rot = parseInt(selected.dataset.rotation || "0");
+      rot = (rot + 90) % 360;
+      selected.dataset.rotation = rot;
+      selected.style.transform = `rotate(${rot}deg)`;
+    });
 
-    function endGame() {
-      gameOver = true;
-      showMessage("پایان... سکوت، همه‌چیز را بلعید.");
-    }
+    deleteBtn.addEventListener("click", () => {
+      if (!selected) return alert("اول یک آیتم را انتخاب کن.");
+      selected.remove();
+      clearSelected();
+    });
 
-    function showMessage(text) {
-      messageEl.innerText = text;
-      messageEl.style.display = "block";
-      setTimeout(() => {
-        messageEl.style.display = "none";
-      }, 4000);
-    }
+    zoomIn.addEventListener("click", () => {
+      scale = Math.min(2, scale + 0.1);
+      map.style.transform = `scale(${scale})`;
+    });
 
-    function restartGame() {
-      location.reload();
-    }
+    zoomOut.addEventListener("click", () => {
+      scale = Math.max(0.5, scale - 0.1);
+      map.style.transform = `scale(${scale})`;
+    });
 
-    function onWindowResize() {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    }
+    clearBtn.addEventListener("click", () => {
+      if (confirm("همه آیتم‌ها حذف شوند؟")) {
+        map.innerHTML = "";
+        clearSelected();
+      }
+    });
 
-    function rand(min, max) {
-      return Math.random() * (max - min) + min;
-    }
+    toolButtons.forEach(btn => btn.addEventListener("click", () => setTool(btn.dataset.tool)));
 
-    function clamp(v, min, max) {
-      return Math.max(min, Math.min(max, v));
-    }
+    // نمونه اولیه
+    createItem("floor", 80, 80, { color: "#e8ddd7" });
+    createItem("floor", 120, 80, { color: "#e8ddd7" });
+    createItem("wall", 160, 80);
+    createItem("wall", 200, 80);
+    createItem("wall", 240, 80);
+    createItem("wallInner", 160, 120);
+    createItem("door", 200, 120, { open: false });
+    createItem("window", 240, 120, { open: false });
 
-    function isPortrait() {
-      return window.innerHeight > window.innerWidth;
-    }
+    createItem("furniture", 400, 200, { icon: "🛋️" });
+    createItem("furniture", 440, 200, { icon: "📺" });
+    createItem("kitchen", 520, 280, { icon: "🧊" });
+    createItem("kitchen", 560, 280, { icon: "🔥" });
+    createItem("kitchen", 600, 280, { icon: "🚰" });
+    createItem("decor", 680, 200, { icon: "🪴" });
+    createItem("tree", 760, 160);
+
+    setTool("select");
   </script>
 </body>
 </html>
