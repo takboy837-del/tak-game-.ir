@@ -1,529 +1,1120 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>مپ‌ساز حرفه‌ای نهایی</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: sans-serif;
-      user-select: none;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Custom COD | مسابقات کالاف دیوتی</title>
+
+<style>
+
+/* =========================
+   RESET
+========================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Tahoma,Arial,sans-serif;
+    direction:rtl;
+    color:white;
+    background:#050505;
+    overflow-x:hidden;
+}
+
+
+/* =========================
+   BACKGROUND
+========================= */
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-2;
+
+    background:
+        radial-gradient(circle at 20% 20%,rgba(255,193,7,.12),transparent 25%),
+        radial-gradient(circle at 80% 70%,rgba(255,0,0,.08),transparent 25%),
+        linear-gradient(135deg,#050505,#0c0c0c,#030303);
+}
+
+body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    opacity:.08;
+
+    background-image:
+        linear-gradient(#fff 1px,transparent 1px),
+        linear-gradient(90deg,#fff 1px,transparent 1px);
+
+    background-size:45px 45px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header{
+    position:sticky;
+    top:0;
+    z-index:999;
+
+    width:100%;
+    min-height:75px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:15px 7%;
+
+    background:rgba(5,5,5,.85);
+    backdrop-filter:blur(15px);
+
+    border-bottom:1px solid rgba(255,204,0,.2);
+
+    box-shadow:
+        0 5px 30px rgba(0,0,0,.5);
+}
+
+.logo{
+    color:#ffd000;
+    font-size:23px;
+    font-weight:bold;
+
+    text-shadow:
+        0 0 10px rgba(255,208,0,.7);
+}
+
+nav{
+    display:flex;
+    gap:30px;
+}
+
+nav a{
+    position:relative;
+
+    color:#ddd;
+    text-decoration:none;
+    font-size:14px;
+
+    transition:.3s;
+}
+
+nav a::after{
+    content:"";
+
+    position:absolute;
+    right:0;
+    bottom:-8px;
+
+    width:0;
+    height:2px;
+
+    background:#ffd000;
+
+    box-shadow:0 0 10px #ffd000;
+
+    transition:.3s;
+}
+
+nav a:hover{
+    color:#ffd000;
+}
+
+nav a:hover::after{
+    width:100%;
+}
+
+
+/* =========================
+   RUBIKA BUTTON
+========================= */
+
+.rubika{
+    position:relative;
+
+    display:inline-block;
+
+    padding:12px 20px;
+
+    color:#050505;
+    background:#ffd000;
+
+    border-radius:8px;
+
+    text-decoration:none;
+    font-weight:bold;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 0 10px rgba(255,208,0,.3);
+
+    transition:.3s;
+}
+
+.rubika::before{
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:-100%;
+
+    width:70%;
+    height:100%;
+
+    background:rgba(255,255,255,.5);
+
+    transform:skewX(-25deg);
+
+    transition:.5s;
+}
+
+.rubika:hover::before{
+    left:130%;
+}
+
+.rubika:hover{
+    transform:translateY(-3px) scale(1.04);
+
+    box-shadow:
+        0 0 15px #ffd000,
+        0 0 40px rgba(255,208,0,.4);
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+    min-height:680px;
+
+    display:flex;
+    align-items:center;
+
+    padding:90px 10%;
+
+    position:relative;
+
+    overflow:hidden;
+}
+
+.hero::before{
+    content:"COD";
+
+    position:absolute;
+
+    left:-50px;
+    bottom:-100px;
+
+    font-size:300px;
+    font-weight:900;
+
+    color:rgba(255,255,255,.025);
+
+    transform:rotate(-15deg);
+
+    pointer-events:none;
+}
+
+.hero-content{
+    max-width:750px;
+}
+
+.small{
+    color:#ffd000;
+
+    font-size:15px;
+    letter-spacing:4px;
+
+    margin-bottom:20px;
+
+    text-shadow:0 0 15px #ffd000;
+}
+
+.hero h1{
+    font-size:65px;
+    line-height:1.15;
+
+    margin-bottom:25px;
+
+    text-shadow:
+        0 5px 20px rgba(0,0,0,.8);
+}
+
+.hero h1 span{
+    color:#ffd000;
+
+    text-shadow:
+        0 0 10px rgba(255,208,0,.6),
+        0 0 30px rgba(255,208,0,.3);
+}
+
+.hero p{
+    color:#aaa;
+
+    font-size:18px;
+
+    line-height:2;
+
+    max-width:650px;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.buttons{
+    display:flex;
+    gap:18px;
+
+    margin-top:35px;
+
+    flex-wrap:wrap;
+}
+
+.btn{
+    position:relative;
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    min-width:190px;
+
+    padding:16px 25px;
+
+    border-radius:9px;
+
+    text-decoration:none;
+
+    font-weight:bold;
+
+    overflow:hidden;
+
+    transition:.35s;
+
+    cursor:pointer;
+}
+
+
+/* MAIN BUTTON */
+
+.main-btn{
+    color:#050505;
+
+    background:#ffd000;
+
+    box-shadow:
+        0 0 15px rgba(255,208,0,.3);
+}
+
+.main-btn::before,
+.second-btn::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:-120%;
+
+    width:80%;
+    height:100%;
+
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.8),
+        transparent
+    );
+
+    transform:skewX(-25deg);
+
+    transition:.6s;
+}
+
+.main-btn:hover::before,
+.second-btn:hover::before{
+    left:130%;
+}
+
+.main-btn:hover{
+    transform:
+        translateY(-6px)
+        scale(1.04);
+
+    box-shadow:
+        0 0 15px #ffd000,
+        0 0 40px rgba(255,208,0,.45);
+}
+
+
+/* SECOND BUTTON */
+
+.second-btn{
+    color:#ffd000;
+
+    border:1px solid #ffd000;
+
+    background:rgba(255,208,0,.04);
+
+    box-shadow:
+        inset 0 0 15px rgba(255,208,0,.03);
+}
+
+.second-btn:hover{
+    color:#050505;
+
+    background:#ffd000;
+
+    transform:
+        translateY(-6px)
+        scale(1.04);
+
+    box-shadow:
+        0 0 15px #ffd000,
+        0 0 40px rgba(255,208,0,.4);
+}
+
+
+/* =========================
+   SECTIONS
+========================= */
+
+section{
+    padding:100px 8%;
+}
+
+section h2{
+    text-align:center;
+
+    font-size:38px;
+
+    margin-bottom:60px;
+
+    color:white;
+
+    text-shadow:
+        0 0 15px rgba(255,208,0,.2);
+}
+
+
+/* =========================
+   CARDS
+========================= */
+
+.cards{
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:25px;
+}
+
+.card{
+    position:relative;
+
+    padding:35px 25px;
+
+    text-align:center;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.06),
+            rgba(255,255,255,.015)
+        );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    transition:.4s;
+}
+
+.card::before{
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:3px;
+
+    background:#ffd000;
+
+    box-shadow:
+        0 0 15px #ffd000;
+
+    transform:scaleX(0);
+
+    transition:.4s;
+}
+
+.card:hover::before{
+    transform:scaleX(1);
+}
+
+.card:hover{
+    transform:
+        translateY(-12px);
+
+    border-color:
+        rgba(255,208,0,.5);
+
+    box-shadow:
+        0 15px 50px rgba(0,0,0,.5),
+        0 0 25px rgba(255,208,0,.1);
+}
+
+.icon{
+    font-size:55px;
+
+    margin-bottom:20px;
+
+    filter:
+        drop-shadow(
+            0 0 10px
+            rgba(255,208,0,.4)
+        );
+}
+
+.card h3{
+    font-size:23px;
+
+    margin-bottom:15px;
+}
+
+.card p{
+    color:#999;
+
+    line-height:1.8;
+
+    margin-bottom:25px;
+}
+
+
+/* =========================
+   CARD BUTTON
+========================= */
+
+.card button,
+.challenge button{
+
+    position:relative;
+
+    border:none;
+
+    padding:14px 25px;
+
+    border-radius:8px;
+
+    color:#050505;
+
+    background:#ffd000;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    overflow:hidden;
+
+    transition:.35s;
+
+    box-shadow:
+        0 0 10px rgba(255,208,0,.2);
+}
+
+.card button::before,
+.challenge button::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:-120%;
+
+    width:80%;
+    height:100%;
+
+    background:rgba(255,255,255,.6);
+
+    transform:skewX(-25deg);
+
+    transition:.5s;
+}
+
+.card button:hover::before,
+.challenge button:hover::before{
+    left:130%;
+}
+
+.card button:hover,
+.challenge button:hover{
+
+    transform:
+        translateY(-4px)
+        scale(1.05);
+
+    box-shadow:
+        0 0 15px #ffd000,
+        0 0 35px rgba(255,208,0,.4);
+}
+
+
+/* =========================
+   CHALLENGE
+========================= */
+
+.challenge{
+
+    max-width:750px;
+
+    margin:auto;
+
+    padding:55px 35px;
+
+    text-align:center;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,208,0,.08),
+            rgba(255,255,255,.02)
+        );
+
+    border:1px solid rgba(255,208,0,.25);
+
+    border-radius:22px;
+
+    box-shadow:
+        0 20px 70px rgba(0,0,0,.4);
+}
+
+.challenge h3{
+
+    font-size:32px;
+
+    color:#ffd000;
+
+    margin-bottom:20px;
+
+    text-shadow:
+        0 0 15px rgba(255,208,0,.5);
+}
+
+.challenge p{
+
+    color:#aaa;
+
+    line-height:2;
+
+    margin-bottom:20px;
+}
+
+.reward{
+
+    margin:25px 0;
+
+    color:#ffd000;
+
+    font-weight:bold;
+
+    font-size:18px;
+}
+
+
+/* =========================
+   RULES
+========================= */
+
+.rules{
+
+    max-width:750px;
+
+    margin:auto;
+
+    padding:30px;
+
+    background:#0c0c0c;
+
+    border-radius:15px;
+
+    border:1px solid #222;
+
+    box-shadow:
+        0 15px 50px rgba(0,0,0,.4);
+}
+
+.rules p{
+
+    padding:15px;
+
+    color:#bbb;
+
+    border-bottom:1px solid #1d1d1d;
+}
+
+.rules p:last-child{
+    border-bottom:none;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+
+    text-align:center;
+
+    padding:60px 20px;
+
+    background:#030303;
+
+    border-top:1px solid #222;
+}
+
+footer h3{
+
+    color:#ffd000;
+
+    font-size:25px;
+
+    margin-bottom:15px;
+
+    text-shadow:
+        0 0 15px rgba(255,208,0,.4);
+}
+
+footer p{
+
+    color:#777;
+
+    margin:12px;
+}
+
+footer a{
+
+    color:#ffd000;
+
+    text-decoration:none;
+
+    font-weight:bold;
+}
+
+.copyright{
+
+    margin-top:25px!important;
+
+    font-size:12px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:800px){
+
+    header{
+
+        flex-direction:column;
+
+        gap:18px;
+
+        padding:20px;
     }
 
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      background: #121212;
-      color: #fff;
-      overflow: hidden;
+    nav{
+
+        gap:15px;
+
+        flex-wrap:wrap;
+
+        justify-content:center;
     }
 
-    .sidebar {
-      width: 340px;
-      background: #232323;
-      border-left: 1px solid #3c3c3c;
-      padding: 14px;
-      overflow-y: auto;
+    .hero{
+
+        min-height:600px;
+
+        padding:70px 20px;
+
+        text-align:center;
     }
 
-    .sidebar h2 {
-      margin: 0 0 12px;
-      font-size: 22px;
+    .hero h1{
+
+        font-size:43px;
     }
 
-    .section {
-      background: #2b2b2b;
-      border-radius: 14px;
-      padding: 12px;
-      margin-bottom: 14px;
+    .hero p{
+
+        font-size:15px;
     }
 
-    .section h3 {
-      margin: 0 0 10px;
-      font-size: 15px;
+    .buttons{
+
+        justify-content:center;
     }
 
-    .tool-btn, .action-btn {
-      width: 100%;
-      margin: 5px 0;
-      padding: 10px;
-      border: none;
-      border-radius: 10px;
-      background: #444;
-      color: white;
-      cursor: pointer;
-      transition: 0.2s;
+    .cards{
+
+        grid-template-columns:1fr;
     }
 
-    .tool-btn:hover, .action-btn:hover {
-      background: #555;
+    section{
+
+        padding:70px 20px;
     }
 
-    .tool-btn.active {
-      background: #0b84ff;
+    section h2{
+
+        font-size:30px;
     }
 
-    .action-btn.primary {
-      background: #0b84ff;
-    }
+    .rubika{
 
-    .action-btn.danger {
-      background: #e53935;
-    }
+        width:100%;
 
-    input, select {
-      width: 100%;
-      margin-top: 6px;
-      padding: 9px;
-      border-radius: 8px;
-      border: 1px solid #555;
-      background: #1b1b1b;
-      color: white;
-      outline: none;
+        text-align:center;
     }
+}
 
-    .row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-
-    .info {
-      font-size: 13px;
-      line-height: 1.8;
-      color: #ddd;
-      background: #1d1d1d;
-      padding: 10px;
-      border-radius: 10px;
-    }
-
-    .main {
-      flex: 1;
-      position: relative;
-      background: #111;
-      overflow: hidden;
-    }
-
-    .topbar {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      z-index: 30;
-      background: rgba(0,0,0,0.6);
-      padding: 8px 10px;
-      border-radius: 10px;
-      font-size: 13px;
-      backdrop-filter: blur(6px);
-    }
-
-    .canvas {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(#2f7d32, #2f7d32);
-    }
-
-    .map {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 2400px;
-      height: 1600px;
-      transform-origin: 0 0;
-      background-image:
-        linear-gradient(to right, rgba(255,255,255,0.08) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,0.08) 1px, transparent 1px);
-      background-size: 40px 40px;
-    }
-
-    .tile {
-      width: 40px;
-      height: 40px;
-      position: absolute;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 24px;
-      transform-origin: center center;
-    }
-
-    .floor { background: rgba(255,255,255,0.12); }
-    .wall { background: #8d6e63; border: 1px solid #5d4037; }
-    .wallInner { background: #c8b39c; border: 1px solid #8d7b70; }
-    .door { background: #6d4c41; border: 1px solid #3e2723; font-size: 20px; }
-    .window { background: #90caf9; border: 1px solid #1565c0; font-size: 20px; }
-    .tree { background: transparent; font-size: 30px; }
-    .furniture, .kitchen, .decor { background: transparent; }
-
-    .selected {
-      outline: 2px solid #00e5ff;
-      z-index: 9999;
-    }
-
-    .ghost {
-      opacity: 0.45;
-    }
-
-    .hint {
-      position: absolute;
-      bottom: 10px;
-      left: 10px;
-      z-index: 30;
-      background: rgba(0,0,0,0.55);
-      padding: 8px 10px;
-      border-radius: 10px;
-      font-size: 12px;
-      color: #ddd;
-    }
-  </style>
+</style>
 </head>
+
+
 <body>
-  <div class="sidebar">
-    <h2>مپ‌ساز نهایی</h2>
 
-    <div class="section">
-      <h3>ابزارها</h3>
-      <button class="tool-btn active" data-tool="select">انتخاب / جابجایی</button>
-      <button class="tool-btn" data-tool="floor">کف</button>
-      <button class="tool-btn" data-tool="wall">دیوار بیرونی</button>
-      <button class="tool-btn" data-tool="wallInner">دیوار داخلی</button>
-      <button class="tool-btn" data-tool="door">در</button>
-      <button class="tool-btn" data-tool="window">پنجره</button>
-      <button class="tool-btn" data-tool="tree">درخت</button>
-      <button class="tool-btn" data-tool="furniture">مبلمان</button>
-      <button class="tool-btn" data-tool="kitchen">آشپزخانه</button>
-      <button class="tool-btn" data-tool="decor">دکور</button>
-      <button class="tool-btn" data-tool="erase">حذف</button>
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+
+    <div class="logo">
+        🎯 CUSTOM COD
     </div>
 
-    <div class="section">
-      <h3>تنظیمات</h3>
+    <nav>
 
-      <label>رنگ دیوار بیرونی:</label>
-      <input type="color" id="wallColor" value="#8d6e63">
+        <a href="#home">خانه</a>
 
-      <label>رنگ دیوار داخلی:</label>
-      <input type="color" id="innerWallColor" value="#c8b39c">
+        <a href="#competitions">
+            مسابقات
+        </a>
 
-      <label>رنگ کف:</label>
-      <input type="color" id="floorColor" value="#e0d7d1">
+        <a href="#challenges">
+            چالش‌ها
+        </a>
 
-      <label>مبلمان:</label>
-      <select id="furnitureItem">
-        <option value="🛋️">مبل</option>
-        <option value="🛏️">تخت</option>
-        <option value="🪑">صندلی</option>
-        <option value="📺">تلویزیون</option>
-        <option value="🗄️">کمد</option>
-        <option value="🪞">آینه</option>
-        <option value="🛌">تخت خواب</option>
-      </select>
+        <a href="#rules">
+            قوانین
+        </a>
 
-      <label>وسایل آشپزخانه:</label>
-      <select id="kitchenItem">
-        <option value="🧊">یخچال</option>
-        <option value="🔥">اجاق</option>
-        <option value="🚰">سینک</option>
-        <option value="🍽️">کابینت</option>
-        <option value="🍳">گاز</option>
-        <option value="🧽">ماشین ظرفشویی</option>
-        <option value="🪑">صندلی</option>
-        <option value="🪵">میز</option>
-        <option value="☕">قهوه‌ساز</option>
-        <option value="🥘">قابلمه</option>
-        <option value="🍞">توستر</option>
-      </select>
+    </nav>
 
-      <label>دکور:</label>
-      <select id="decorItem">
-        <option value="🖼️">تابلو</option>
-        <option value="🪴">گلدان</option>
-        <option value="🕯️">شمع</option>
-        <option value="📚">کتاب</option>
-        <option value="🧸">عروسک</option>
-        <option value="🪟">قاب</option>
-        <option value="🏮">چراغ</option>
-      </select>
+    <a
+        class="rubika"
+        href="https://rubika.ir/custom__shop"
+        target="_blank"
+    >
+        📱 ورود به روبیکا
+    </a>
 
-      <div class="row">
-        <button class="action-btn primary" id="rotateBtn">چرخش</button>
-        <button class="action-btn danger" id="deleteBtn">حذف انتخاب</button>
-      </div>
+</header>
 
-      <div class="row">
-        <button class="action-btn" id="zoomIn">زوم +</button>
-        <button class="action-btn" id="zoomOut">زوم -</button>
-      </div>
 
-      <button class="action-btn danger" id="clearBtn">پاک کردن همه</button>
+<!-- =========================
+     HERO
+========================= -->
+
+<section
+    class="hero"
+    id="home"
+>
+
+    <div class="hero-content">
+
+        <div class="small">
+            CALL OF DUTY CUSTOM
+        </div>
+
+        <h1>
+
+            وارد میدان شو
+
+            <br>
+
+            <span>
+                قهرمان شو!
+            </span>
+
+        </h1>
+
+        <p>
+
+            مسابقات و چالش‌های کاستوم کالاف دیوتی
+            برای بازیکنان حرفه‌ای و آماتور.
+
+        </p>
+
+        <div class="buttons">
+
+            <a
+                href="#competitions"
+                class="btn main-btn"
+            >
+                🏆 مشاهده مسابقات
+            </a>
+
+            <a
+                href="https://rubika.ir/custom__shop"
+                target="_blank"
+                class="btn second-btn"
+            >
+                📱 ورود به روبیکا
+            </a>
+
+        </div>
+
     </div>
 
-    <div class="section info" id="info">
-      ابزار فعال: <b>انتخاب / جابجایی</b><br>
-      - دیوار را با کلیک بساز<br>
-      - روی آیتم‌ها کلیک کن و Drag کن<br>
-      - در و پنجره با دوبار کلیک باز/بسته می‌شوند<br>
-      - راست‌کلیک روی آیتم = حذف سریع
+</section>
+
+
+<!-- =========================
+     COMPETITIONS
+========================= -->
+
+<section id="competitions">
+
+    <h2>
+        🏆 مسابقات
+    </h2>
+
+    <div class="cards">
+
+
+        <div class="card">
+
+            <div class="icon">
+                🔥
+            </div>
+
+            <h3>
+                بتل رویال
+            </h3>
+
+            <p>
+                با بازیکنان دیگر رقابت کن
+                و مقام اول را به دست بیاور.
+            </p>
+
+            <button
+                onclick="openRubika()"
+            >
+                شرکت در مسابقه
+            </button>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="icon">
+                🎯
+            </div>
+
+            <h3>
+                مولتی پلیر
+            </h3>
+
+            <p>
+                یک رقابت سریع و هیجان‌انگیز
+                بین بازیکنان.
+            </p>
+
+            <button
+                onclick="openRubika()"
+            >
+                شرکت در مسابقه
+            </button>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="icon">
+                💀
+            </div>
+
+            <h3>
+                اسنایپر
+            </h3>
+
+            <p>
+                فقط اسنایپر!
+                مهارت خودت را ثابت کن.
+            </p>
+
+            <button
+                onclick="openRubika()"
+            >
+                شرکت در مسابقه
+            </button>
+
+        </div>
+
+
     </div>
-  </div>
 
-  <div class="main">
-    <div class="canvas" id="canvas">
-      <div class="topbar">ساخت نمای داخلی و بیرونی — مپ‌ساز حرفه‌ای</div>
-      <div class="map" id="map"></div>
-      <div class="hint">نکته: برای ساخت اتاق، اول کف بگذار، بعد دیوارها را دورش بچین، بعد در و پنجره و وسایل را اضافه کن.</div>
+</section>
+
+
+<!-- =========================
+     CHALLENGE
+========================= -->
+
+<section id="challenges">
+
+    <h2>
+        ⚡ چالش‌ها
+    </h2>
+
+    <div class="challenge">
+
+        <h3>
+            چالش هفتگی
+        </h3>
+
+        <p>
+
+            در یک مسابقه بیشترین کیل را بگیر
+            و رکورد خودت را ثبت کن!
+
+        </p>
+
+        <div class="reward">
+            🏆 جایزه: مقام ویژه
+        </div>
+
+        <button
+            onclick="openRubika()"
+        >
+            🚀 شرکت در چالش
+        </button>
+
     </div>
-  </div>
 
-  <script>
-    const map = document.getElementById("map");
-    const canvas = document.getElementById("canvas");
-    const toolButtons = document.querySelectorAll(".tool-btn");
-    const info = document.getElementById("info");
+</section>
 
-    const wallColor = document.getElementById("wallColor");
-    const innerWallColor = document.getElementById("innerWallColor");
-    const floorColor = document.getElementById("floorColor");
-    const furnitureItem = document.getElementById("furnitureItem");
-    const kitchenItem = document.getElementById("kitchenItem");
-    const decorItem = document.getElementById("decorItem");
 
-    const rotateBtn = document.getElementById("rotateBtn");
-    const deleteBtn = document.getElementById("deleteBtn");
-    const zoomIn = document.getElementById("zoomIn");
-    const zoomOut = document.getElementById("zoomOut");
-    const clearBtn = document.getElementById("clearBtn");
+<!-- =========================
+     RULES
+========================= -->
 
-    let currentTool = "select";
-    let selected = null;
-    let dragging = null;
-    let dragOffsetX = 0;
-    let dragOffsetY = 0;
-    let scale = 1;
-    const grid = 40;
+<section id="rules">
 
-    function setTool(tool) {
-      currentTool = tool;
-      toolButtons.forEach(btn => btn.classList.remove("active"));
-      document.querySelector(`[data-tool="${tool}"]`).classList.add("active");
+    <h2>
+        📜 قوانین مسابقات
+    </h2>
 
-      const labels = {
-        select: "انتخاب / جابجایی",
-        floor: "کف",
-        wall: "دیوار بیرونی",
-        wallInner: "دیوار داخلی",
-        door: "در",
-        window: "پنجره",
-        tree: "درخت",
-        furniture: "مبلمان",
-        kitchen: "آشپزخانه",
-        decor: "دکور",
-        erase: "حذف"
-      };
+    <div class="rules">
 
-      info.innerHTML = `ابزار فعال: <b>${labels[tool]}</b><br>
-      - دیوار را با کلیک بساز<br>
-      - روی آیتم‌ها کلیک کن و Drag کن<br>
-      - در و پنجره با دوبار کلیک باز/بسته می‌شوند<br>
-      - راست‌کلیک روی آیتم = حذف سریع`;
-    }
+        <p>
+            ✔ استفاده از چیت و هک ممنوع است.
+        </p>
 
-    function snap(v) {
-      return Math.round(v / grid) * grid;
-    }
+        <p>
+            ✔ توهین به سایر بازیکنان ممنوع است.
+        </p>
 
-    function clearSelected() {
-      if (selected) selected.classList.remove("selected");
-      selected = null;
-    }
+        <p>
+            ✔ نتیجه مسابقه باید طبق قوانین ثبت شود.
+        </p>
 
-    function setSelected(el) {
-      clearSelected();
-      selected = el;
-      el.classList.add("selected");
-    }
+        <p>
+            ✔ تخلف باعث حذف بازیکن می‌شود.
+        </p>
 
-    function createItem(type, x, y, data = {}) {
-      const el = document.createElement("div");
-      el.className = "tile";
-      el.dataset.type = type;
-      el.dataset.rotation = data.rotation || "0";
-      el.style.left = x + "px";
-      el.style.top = y + "px";
-      el.style.transform = `rotate(${el.dataset.rotation}deg)`;
+    </div>
 
-      if (type === "floor") {
-        el.classList.add("floor");
-        el.style.background = data.color || floorColor.value;
-      } else if (type === "wall") {
-        el.classList.add("wall");
-        el.style.background = data.color || wallColor.value;
-      } else if (type === "wallInner") {
-        el.classList.add("wallInner");
-        el.style.background = data.color || innerWallColor.value;
-      } else if (type === "door") {
-        el.classList.add("door");
-        el.textContent = "🚪";
-        el.dataset.open = data.open ? "1" : "0";
-        el.style.opacity = data.open ? "0.7" : "1";
-      } else if (type === "window") {
-        el.classList.add("window");
-        el.textContent = "🪟";
-        el.dataset.open = data.open ? "1" : "0";
-        el.style.opacity = data.open ? "1" : "0.75";
-      } else if (type === "tree") {
-        el.classList.add("tree");
-        el.textContent = "🌳";
-      } else if (type === "furniture") {
-        el.classList.add("furniture");
-        el.textContent = data.icon || "🛋️";
-      } else if (type === "kitchen") {
-        el.classList.add("kitchen");
-        el.textContent = data.icon || "🧊";
-      } else if (type === "decor") {
-        el.classList.add("decor");
-        el.textContent = data.icon || "🖼️";
-      }
+</section>
 
-      el.addEventListener("click", (e) => {
-        e.stopPropagation();
 
-        if (currentTool === "erase") {
-          el.remove();
-          if (selected === el) clearSelected();
-          return;
-        }
+<!-- =========================
+     FOOTER
+========================= -->
 
-        setSelected(el);
-      });
+<footer>
 
-      el.addEventListener("dblclick", (e) => {
-        e.stopPropagation();
-        if (type === "door") {
-          const open = el.dataset.open === "1";
-          el.dataset.open = open ? "0" : "1";
-          el.style.opacity = open ? "1" : "0.7";
-        }
-        if (type === "window") {
-          const open = el.dataset.open === "1";
-          el.dataset.open = open ? "0" : "1";
-          el.style.opacity = open ? "0.75" : "1";
-        }
-      });
+    <h3>
+        🎯 CUSTOM COD
+    </h3>
 
-      el.addEventListener("contextmenu", (e) => {
-        e.preventDefault();
-        el.remove();
-        if (selected === el) clearSelected();
-      });
+    <p>
+        مرجع مسابقات و چالش‌های کاستوم کالاف دیوتی
+    </p>
 
-      el.addEventListener("mousedown", (e) => {
-        if (currentTool === "select") {
-          dragging = el;
-          setSelected(el);
-          const rect = el.getBoundingClientRect();
-          dragOffsetX = e.clientX - rect.left;
-          dragOffsetY = e.clientY - rect.top;
-        }
-      });
+    <a
+        href="https://rubika.ir/custom__shop"
+        target="_blank"
+    >
+        @custom__shop
+    </a>
 
-      map.appendChild(el);
-      return el;
-    }
+    <p class="copyright">
+        © 2026 Custom COD
+    </p>
 
-    document.addEventListener("mousemove", (e) => {
-      if (!dragging) return;
-      const rect = map.getBoundingClientRect();
-      const x = snap((e.clientX - rect.left - dragOffsetX) / scale);
-      const y = snap((e.clientY - rect.top - dragOffsetY) / scale);
-      dragging.style.left = x + "px";
-      dragging.style.top = y + "px";
-    });
+</footer>
 
-    document.addEventListener("mouseup", () => {
-      dragging = null;
-    });
 
-    map.addEventListener("click", (e) => {
-      const rect = map.getBoundingClientRect();
-      const x = snap((e.clientX - rect.left) / scale);
-      const y = snap((e.clientY - rect.top) / scale);
+<!-- =========================
+     JAVASCRIPT
+========================= -->
 
-      if (currentTool === "floor") createItem("floor", x, y, { color: floorColor.value });
-      else if (currentTool === "wall") createItem("wall", x, y, { color: wallColor.value });
-      else if (currentTool === "wallInner") createItem("wallInner", x, y, { color: innerWallColor.value });
-      else if (currentTool === "door") createItem("door", x, y, { open: false });
-      else if (currentTool === "window") createItem("window", x, y, { open: false });
-      else if (currentTool === "tree") createItem("tree", x, y);
-      else if (currentTool === "furniture") createItem("furniture", x, y, { icon: furnitureItem.value });
-      else if (currentTool === "kitchen") createItem("kitchen", x, y, { icon: kitchenItem.value });
-      else if (currentTool === "decor") createItem("decor", x, y, { icon: decorItem.value });
-      else if (currentTool === "erase") {
-        const target = document.elementFromPoint(e.clientX, e.clientY);
-        if (target && target.classList.contains("tile")) target.remove();
-      } else if (currentTool === "select") {
-        const target = document.elementFromPoint(e.clientX, e.clientY);
-        if (target && target.classList.contains("tile")) setSelected(target);
-        else clearSelected();
-      }
-    });
+<script>
 
-    rotateBtn.addEventListener("click", () => {
-      if (!selected) return alert("اول یک آیتم را انتخاب کن.");
-      let rot = parseInt(selected.dataset.rotation || "0");
-      rot = (rot + 90) % 360;
-      selected.dataset.rotation = rot;
-      selected.style.transform = `rotate(${rot}deg)`;
-    });
+function openRubika(){
 
-    deleteBtn.addEventListener("click", () => {
-      if (!selected) return alert("اول یک آیتم را انتخاب کن.");
-      selected.remove();
-      clearSelected();
-    });
+    window.open(
+        "https://rubika.ir/custom__shop",
+        "_blank"
+    );
 
-    zoomIn.addEventListener("click", () => {
-      scale = Math.min(2, scale + 0.1);
-      map.style.transform = `scale(${scale})`;
-    });
+}
 
-    zoomOut.addEventListener("click", () => {
-      scale = Math.max(0.5, scale - 0.1);
-      map.style.transform = `scale(${scale})`;
-    });
+</script>
 
-    clearBtn.addEventListener("click", () => {
-      if (confirm("همه آیتم‌ها حذف شوند؟")) {
-        map.innerHTML = "";
-        clearSelected();
-      }
-    });
 
-    toolButtons.forEach(btn => btn.addEventListener("click", () => setTool(btn.dataset.tool)));
-
-    // نمونه اولیه
-    createItem("floor", 80, 80, { color: "#e8ddd7" });
-    createItem("floor", 120, 80, { color: "#e8ddd7" });
-    createItem("wall", 160, 80);
-    createItem("wall", 200, 80);
-    createItem("wall", 240, 80);
-    createItem("wallInner", 160, 120);
-    createItem("door", 200, 120, { open: false });
-    createItem("window", 240, 120, { open: false });
-
-    createItem("furniture", 400, 200, { icon: "🛋️" });
-    createItem("furniture", 440, 200, { icon: "📺" });
-    createItem("kitchen", 520, 280, { icon: "🧊" });
-    createItem("kitchen", 560, 280, { icon: "🔥" });
-    createItem("kitchen", 600, 280, { icon: "🚰" });
-    createItem("decor", 680, 200, { icon: "🪴" });
-    createItem("tree", 760, 160);
-
-    setTool("select");
-  </script>
 </body>
 </html>
